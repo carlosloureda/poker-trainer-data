@@ -1,0 +1,85 @@
+:root {
+  --bg-color: #0f172a; /* slate-900 */
+  --panel-bg: #1e293b; /* slate-800 */
+  --text-primary: #f8fafc; /* slate-50 */
+  --text-secondary: #94a3b8; /* slate-400 */
+  --border-color: #334155; /* slate-700 */
+  --grid-gap: 2px;
+  --cell-size: 3rem;
+  
+  /* Hand Types Backgrounds default */
+  --pair-bg: #334155; /* slate-700 */
+  --suited-bg: #1e293b; /* slate-800 */
+  --offsuit-bg: #0f172a; /* slate-900 */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Base styles for the Range Grid */
+.range-grid-container {
+  display: grid;
+  grid-template-columns: repeat(13, var(--cell-size));
+  gap: var(--grid-gap);
+  padding: 1rem;
+  background-color: var(--panel-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  user-select: none;
+  width: fit-content;
+}
+
+.hand-cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.05s ease, border-color 0.1s ease;
+}
+
+.hand-cell:hover {
+  border-color: #cbd5e1; /* slate-300 */
+  z-index: 10;
+}
+
+/* Types of hands (for diagonal orientation and background) */
+.hand-cell.pair { background-color: var(--pair-bg); }
+.hand-cell.suited { background-color: var(--suited-bg); }
+.hand-cell.offsuit { background-color: var(--offsuit-bg); }
+
+/* The background color fill that represents the action frequency */
+.hand-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 0;
+  transform-origin: bottom;
+}
+
+.hand-label {
+  position: relative;
+  z-index: 1;
+  text-shadow: 0px 1px 2px rgba(0,0,0,0.8);
+}
