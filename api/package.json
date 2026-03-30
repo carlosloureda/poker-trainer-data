@@ -1,0 +1,11 @@
+{
+  "name": "poker-trainer-api",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "@vercel/node": "^5"
+  },
+  "devDependencies": {
+    "@types/node": "^22"
+  }
+}
