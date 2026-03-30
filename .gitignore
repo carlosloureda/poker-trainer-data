@@ -1,0 +1,13 @@
+# Subproyecto con su propio git — no trackear
+futbol_scraper/
+
+# App dependencies
+app/node_modules/
+app/dist/
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+*.local
