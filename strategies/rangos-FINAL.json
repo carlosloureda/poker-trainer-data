@@ -1,105 +1,31 @@
 {
   "Range_Craft": {
     "utg": {
-      "open": [
-        "22+",
-        "A2s+",
-        "AJo+",
-        "KQo",
-        "KTs+",
-        "QTs+",
-        "JTs",
-        "T9s"
-      ],
+      "open": ["22+", "A2s+", "AJo+", "KQo", "KTs+", "QTs+", "JTs", "T9s"],
       "4bet_vs_hj": {
-        "4bet_6bet": [
-          "AA",
-          "KK"
-        ],
-        "4bet_fold": [
-          "A5s:0.5"
-        ],
-        "call_3bet": [
-          "QQ",
-          "JJ",
-          "TT",
-          "AKs",
-          "AKo",
-          "AQs"
-        ]
+        "4bet_6bet": ["AA", "KK"],
+        "4bet_fold": ["A5s:0.5"],
+        "call_3bet": ["QQ", "JJ", "TT", "AKs", "AKo", "AQs"]
       },
       "4bet_vs_co": {
-        "4bet_6bet": [
-          "AA",
-          "KK"
-        ],
-        "4bet_fold": [
-          "A5s:0.5"
-        ],
-        "call_3bet": [
-          "QQ",
-          "JJ",
-          "TT",
-          "AKs",
-          "AKo",
-          "AQs"
-        ]
+        "4bet_6bet": ["AA", "KK"],
+        "4bet_fold": ["A5s:0.5"],
+        "call_3bet": ["QQ", "JJ", "TT", "AKs", "AKo", "AQs"]
       },
       "4bet_vs_btn": {
-        "4bet_6bet": [
-          "AA",
-          "KK"
-        ],
-        "4bet_fold": [
-          "A5s:0.5",
-          "A4s:0.5"
-        ],
-        "call_3bet": [
-          "QQ",
-          "JJ",
-          "TT",
-          "AKs",
-          "AKo"
-        ]
+        "4bet_6bet": ["AA", "KK"],
+        "4bet_fold": ["A5s:0.5", "A4s:0.5"],
+        "call_3bet": ["QQ", "JJ", "TT", "AKs", "AKo"]
       },
       "4bet_vs_sb": {
-        "4bet_6bet": [
-          "AA",
-          "KK"
-        ],
-        "4bet_fold": [
-          "A5s:0.5"
-        ],
-        "call_3bet": [
-          "QQ",
-          "JJ",
-          "TT",
-          "AKs",
-          "AKo",
-          "AQs",
-          "AJs",
-          "KQs"
-        ]
+        "4bet_6bet": ["AA", "KK"],
+        "4bet_fold": ["A5s:0.5"],
+        "call_3bet": ["QQ", "JJ", "TT", "AKs", "AKo", "AQs", "AJs", "KQs"]
       },
       "4bet_vs_bb": {
-        "4bet_6bet": [
-          "AA",
-          "KK"
-        ],
-        "4bet_fold": [
-          "A5s:0.5",
-          "A4s:0.5",
-          "A3s:0.5",
-          "A2s:0.5"
-        ],
-        "call_3bet": [
-          "QQ",
-          "JJ",
-          "TT",
-          "AKs",
-          "AKo",
-          "AQs"
-        ]
+        "4bet_6bet": ["AA", "KK"],
+        "4bet_fold": ["A5s:0.5", "A4s:0.5", "A3s:0.5", "A2s:0.5"],
+        "call_3bet": ["QQ", "JJ", "TT", "AKs", "AKo", "AQs"]
       }
     },
     "hj": {
@@ -118,16 +44,8 @@
         "54s"
       ],
       "3bet_vs_utg": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK"
-        ],
-        "3bet_fold": [
-          "QQ",
-          "AKs",
-          "AKo",
-          "A5s:0.5"
-        ],
+        "3bet_5bet_shove": ["AA", "KK"],
+        "3bet_fold": ["QQ", "AKs", "AKo", "A5s:0.5"],
         "call_open": [
           "JJ",
           "TT",
@@ -145,85 +63,24 @@
         ]
       },
       "4bet_vs_co": {
-        "4bet_6bet": [
-          "AA",
-          "KK",
-          "QQ",
-          "AKs",
-          "AKo"
-        ],
-        "4bet_fold": [
-          "A5s:0.5"
-        ],
-        "call_3bet": [
-          "JJ",
-          "TT",
-          "AQs"
-        ]
+        "4bet_6bet": ["AA", "KK", "QQ", "AKs", "AKo"],
+        "4bet_fold": ["A5s:0.5"],
+        "call_3bet": ["JJ", "TT", "AQs"]
       },
       "4bet_vs_btn": {
-        "4bet_6bet": [
-          "AA",
-          "KK",
-          "QQ",
-          "AKs",
-          "AKo"
-        ],
-        "4bet_fold": [
-          "A5s:0.5",
-          "A4s:0.5"
-        ],
-        "call_3bet": [
-          "JJ",
-          "TT",
-          "AQs"
-        ]
+        "4bet_6bet": ["AA", "KK", "QQ", "AKs", "AKo"],
+        "4bet_fold": ["A5s:0.5", "A4s:0.5"],
+        "call_3bet": ["JJ", "TT", "AQs"]
       },
       "4bet_vs_sb": {
-        "4bet_6bet": [
-          "AA",
-          "KK",
-          "QQ",
-          "AKs",
-          "AKo"
-        ],
-        "4bet_fold": [
-          "A5s:0.5"
-        ],
-        "call_3bet": [
-          "JJ",
-          "TT",
-          "AQs",
-          "AJs",
-          "KQs",
-          "KJs",
-          "QJs",
-          "JTs"
-        ]
+        "4bet_6bet": ["AA", "KK", "QQ", "AKs", "AKo"],
+        "4bet_fold": ["A5s:0.5"],
+        "call_3bet": ["JJ", "TT", "AQs", "AJs", "KQs", "KJs", "QJs", "JTs"]
       },
       "4bet_vs_bb": {
-        "4bet_6bet": [
-          "AA",
-          "KK",
-          "QQ",
-          "AKs",
-          "AKo"
-        ],
-        "4bet_fold": [
-          "A5s:0.5",
-          "A4s:0.5",
-          "A3s:0.5"
-        ],
-        "call_3bet": [
-          "JJ",
-          "TT",
-          "AQs",
-          "AJs",
-          "KQs",
-          "KJs",
-          "QJs",
-          "JTs"
-        ]
+        "4bet_6bet": ["AA", "KK", "QQ", "AKs", "AKo"],
+        "4bet_fold": ["A5s:0.5", "A4s:0.5", "A3s:0.5"],
+        "call_3bet": ["JJ", "TT", "AQs", "AJs", "KQs", "KJs", "QJs", "JTs"]
       }
     },
     "co": {
@@ -244,101 +101,29 @@
         "54s"
       ],
       "3bet_vs_utg": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK"
-        ],
-        "3bet_fold": [
-          "QQ",
-          "AKs",
-          "AKo",
-          "A5s:0.5"
-        ],
-        "call_open": [
-          "JJ-22",
-          "AQs"
-        ]
+        "3bet_5bet_shove": ["AA", "KK"],
+        "3bet_fold": ["QQ", "AKs", "AKo", "A5s:0.5"],
+        "call_open": ["JJ-22", "AQs"]
       },
       "3bet_vs_hj": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK"
-        ],
-        "3bet_fold": [
-          "QQ",
-          "AKs",
-          "AKo",
-          "A5s:0.5"
-        ],
-        "call_open": [
-          "JJ-22",
-          "AQs"
-        ]
+        "3bet_5bet_shove": ["AA", "KK"],
+        "3bet_fold": ["QQ", "AKs", "AKo", "A5s:0.5"],
+        "call_open": ["JJ-22", "AQs"]
       },
       "4bet_vs_btn": {
-        "4bet_6bet": [
-          "AA",
-          "KK",
-          "QQ",
-          "AKs",
-          "AKo"
-        ],
-        "4bet_fold": [
-          "A5s:0.5"
-        ],
-        "call_3bet": [
-          "JJ",
-          "TT",
-          "AQs",
-          "AJs",
-          "KQs"
-        ]
+        "4bet_6bet": ["AA", "KK", "QQ", "AKs", "AKo"],
+        "4bet_fold": ["A5s:0.5"],
+        "call_3bet": ["JJ", "TT", "AQs", "AJs", "KQs"]
       },
       "4bet_vs_sb": {
-        "4bet_6bet": [
-          "AA",
-          "KK",
-          "QQ",
-          "AKs",
-          "AKo"
-        ],
-        "4bet_fold": [
-          "A5s:0.5",
-          "A4s:0.5"
-        ],
-        "call_3bet": [
-          "JJ",
-          "TT",
-          "AQs",
-          "AJs",
-          "KQs",
-          "KJs",
-          "QJs",
-          "JTs"
-        ]
+        "4bet_6bet": ["AA", "KK", "QQ", "AKs", "AKo"],
+        "4bet_fold": ["A5s:0.5", "A4s:0.5"],
+        "call_3bet": ["JJ", "TT", "AQs", "AJs", "KQs", "KJs", "QJs", "JTs"]
       },
       "4bet_vs_bb": {
-        "4bet_6bet": [
-          "AA",
-          "KK",
-          "QQ",
-          "AKs",
-          "AKo"
-        ],
-        "4bet_fold": [
-          "A5s:0.5",
-          "A4s:0.5"
-        ],
-        "call_3bet": [
-          "JJ",
-          "TT",
-          "AQs",
-          "AJs",
-          "KQs",
-          "KJs",
-          "QJs",
-          "JTs"
-        ]
+        "4bet_6bet": ["AA", "KK", "QQ", "AKs", "AKo"],
+        "4bet_fold": ["A5s:0.5", "A4s:0.5"],
+        "call_3bet": ["JJ", "TT", "AQs", "AJs", "KQs", "KJs", "QJs", "JTs"]
       }
     },
     "btn": {
@@ -361,66 +146,19 @@
         "53s"
       ],
       "3bet_vs_utg_hj": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK"
-        ],
-        "3bet_fold": [
-          "QQ",
-          "AKs",
-          "AKo",
-          "A5s:0.5"
-        ],
-        "call_open": [
-          "JJ-22",
-          "AQs"
-        ]
+        "3bet_5bet_shove": ["AA", "KK"],
+        "3bet_fold": ["QQ", "AKs", "AKo", "A5s:0.5"],
+        "call_open": ["JJ-22", "AQs"]
       },
       "3bet_vs_co": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK",
-          "QQ",
-          "JJ",
-          "AKs",
-          "AKo"
-        ],
-        "3bet_fold": [
-          "TT",
-          "AQs",
-          "AQo",
-          "A5s:0.5",
-          "A4s:0.5"
-        ],
-        "call_open": [
-          "99-22",
-          "AJs",
-          "ATs",
-          "KQs",
-          "KJs",
-          "QJs",
-          "JTs"
-        ]
+        "3bet_5bet_shove": ["AA", "KK", "QQ", "JJ", "AKs", "AKo"],
+        "3bet_fold": ["TT", "AQs", "AQo", "A5s:0.5", "A4s:0.5"],
+        "call_open": ["99-22", "AJs", "ATs", "KQs", "KJs", "QJs", "JTs"]
       },
       "squeeze": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK",
-          "QQ",
-          "JJ",
-          "AKs",
-          "AKo"
-        ],
-        "3bet_fold": [
-          "TT",
-          "AQs",
-          "AQo"
-        ],
-        "call_open": [
-          "99-22",
-          "AJs",
-          "KQs"
-        ]
+        "3bet_5bet_shove": ["AA", "KK", "QQ", "JJ", "AKs", "AKo"],
+        "3bet_fold": ["TT", "AQs", "AQo"],
+        "call_open": ["99-22", "AJs", "KQs"]
       }
     },
     "sb": {
@@ -438,124 +176,58 @@
         "98s",
         "87s"
       ],
-      "3bet_vs_btn": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK",
-          "QQ",
-          "JJ",
-          "AKs",
-          "AKo"
-        ],
+      "3bet_vs_utg": {
+        "3bet_5bet_shove": ["AA", "KK"],
+        "3bet_fold": ["QQ", "AKs", "AKo", "A5s:0.5"],
+        "call_open": ["JJ-22", "AJs", "KQs", "AQs"]
+      },
+      "3bet_vs_hj": {
+        "3bet_5bet_shove": ["AA", "KK"],
+        "3bet_fold": ["QQ", "JJ", "AKs", "AKo", "A5s:0.5", "A4s:0.5"],
+        "call_open": ["TT-22", "AJs", "KQs", "AQs", "QJs", "JTs"]
+      },
+      "3bet_vs_co": {
+        "3bet_5bet_shove": ["AA", "KK", "QQ", "AKs", "AKo"],
         "3bet_fold": [
+          "JJ",
           "TT",
           "AQs",
           "AQo",
           "A5s:0.5",
-          "A4s:0.5"
+          "A4s:0.5",
+          "A3s:0.5"
         ],
-        "call_open": [
-          "99-22",
-          "AJs",
-          "ATs",
-          "KQs",
-          "KJs",
-          "QJs",
-          "JTs"
-        ]
+        "call_open": ["99-22", "AJs", "KQs", "AQs", "QJs", "JTs"]
+      },
+      "3bet_vs_btn": {
+        "3bet_5bet_shove": ["AA", "KK", "QQ", "JJ", "AKs", "AKo"],
+        "3bet_fold": ["TT", "AQs", "AQo", "A5s:0.5", "A4s:0.5"],
+        "call_open": ["99-22", "AJs", "ATs", "KQs", "KJs", "QJs", "JTs"]
       },
       "4bet_vs_bb": {
-        "4bet_6bet": [
-          "AA",
-          "KK",
-          "QQ",
-          "JJ",
-          "AKs",
-          "AKo"
-        ],
-        "4bet_fold": [
-          "A5s:0.5",
-          "A4s:0.5",
-          "A3s:0.5",
-          "A2s:0.5"
-        ],
-        "call_3bet": [
-          "TT",
-          "99",
-          "88",
-          "AQs",
-          "AJs"
-        ]
+        "4bet_6bet": ["AA", "KK", "QQ", "JJ", "AKs", "AKo"],
+        "4bet_fold": ["A5s:0.5", "A4s:0.5", "A3s:0.5", "A2s:0.5"],
+        "call_3bet": ["TT", "99", "88", "AQs", "AJs"]
       },
       "squeeze": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK",
-          "QQ",
-          "JJ",
-          "AKs",
-          "AKo"
-        ],
-        "3bet_fold": [
-          "TT",
-          "AQs",
-          "AQo"
-        ],
-        "call_open": [
-          "99-22",
-          "AJs",
-          "KQs"
-        ]
+        "3bet_5bet_shove": ["AA", "KK", "QQ", "JJ", "AKs", "AKo"],
+        "3bet_fold": ["TT", "AQs", "AQo"],
+        "call_open": ["99-22", "AJs", "KQs"]
       }
     },
     "bb": {
       "3bet_vs_utg": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK"
-        ],
-        "3bet_fold": [
-          "QQ",
-          "AKs",
-          "AKo",
-          "A5s:0.5"
-        ],
-        "call_open": [
-          "JJ-22",
-          "AQs",
-          "AJs",
-          "KQs",
-          "QJs",
-          "JTs"
-        ]
+        "3bet_5bet_shove": ["AA", "KK"],
+        "3bet_fold": ["QQ", "AKs", "AKo", "A5s:0.5"],
+        "call_open": ["JJ-22", "AQs", "AJs", "KQs", "QJs", "JTs"]
       },
       "3bet_vs_hj": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK"
-        ],
-        "3bet_fold": [
-          "QQ",
-          "AKs",
-          "AKo",
-          "A5s:0.5",
-          "A4s:0.5"
-        ],
-        "call_open": [
-          "JJ-22",
-          "AQs",
-          "AJs",
-          "KQs",
-          "QJs",
-          "JTs"
-        ]
+        "3bet_5bet_shove": ["AA", "KK"],
+        "3bet_fold": ["QQ", "AKs", "AKo", "A5s:0.5", "A4s:0.5"],
+        "call_open": ["JJ-22", "AQs", "AJs", "KQs", "QJs", "JTs"]
       },
       "3bet_vs_co": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK",
-          "AKs"
-        ],
+        "3bet_5bet_shove": ["AA", "KK", "AKs"],
         "3bet_fold": [
           "QQ",
           "JJ",
@@ -566,32 +238,11 @@
           "A4s:0.5",
           "A3s:0.5"
         ],
-        "call_open": [
-          "99-22",
-          "AJs",
-          "ATs",
-          "KQs",
-          "KJs",
-          "QJs",
-          "JTs"
-        ]
+        "call_open": ["99-22", "AJs", "ATs", "KQs", "KJs", "QJs", "JTs"]
       },
       "3bet_vs_btn": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK",
-          "QQ",
-          "AKs",
-          "AKo"
-        ],
-        "3bet_fold": [
-          "AQs",
-          "AQo",
-          "A5s:0.5",
-          "A4s:0.5",
-          "KTs",
-          "QTs"
-        ],
+        "3bet_5bet_shove": ["AA", "KK", "QQ", "AKs", "AKo"],
+        "3bet_fold": ["AQs", "AQo", "A5s:0.5", "A4s:0.5", "KTs", "QTs"],
         "call_open": [
           "JJ-22",
           "AJs",
@@ -605,13 +256,7 @@
         ]
       },
       "3bet_vs_sb": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK",
-          "QQ",
-          "AKs",
-          "AKo"
-        ],
+        "3bet_5bet_shove": ["AA", "KK", "QQ", "AKs", "AKo"],
         "3bet_fold": [
           "JJ",
           "TT",
@@ -625,33 +270,12 @@
           "QJs",
           "JTs"
         ],
-        "call_open": [
-          "99-22",
-          "AJs",
-          "ATs",
-          "KQs"
-        ]
+        "call_open": ["99-22", "AJs", "ATs", "KQs"]
       },
       "squeeze": {
-        "3bet_5bet_shove": [
-          "AA",
-          "KK",
-          "QQ",
-          "AKs",
-          "AKo"
-        ],
-        "3bet_fold": [
-          "JJ",
-          "TT",
-          "AQs",
-          "AQo"
-        ],
-        "call_open": [
-          "99-22",
-          "AJs",
-          "KQs",
-          "JTs"
-        ]
+        "3bet_5bet_shove": ["AA", "KK", "QQ", "AKs", "AKo"],
+        "3bet_fold": ["JJ", "TT", "AQs", "AQo"],
+        "call_open": ["99-22", "AJs", "KQs", "JTs"]
       }
     }
   }

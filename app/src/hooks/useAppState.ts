@@ -28,35 +28,53 @@ export function useAppState(): UseAppState {
   const [positions, setPositions] = useState<ResolvedPosition[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Helper logic to find what to load
+  const autoLoad = async (list: Strategy[]) => {
+    if (list.length === 0) return;
+    
+    const last = localStorage.getItem('last_strategy');
+    const toLoad = (last && list.find(s => s.name === last)) ? last : list[0].name;
+    
+    // We can't call loadStrategy directly here as it uses state we are setting
+    try {
+      const json = await apiGetStrategy(toLoad) as RangeCraftJSON;
+      setPositions(parseRangeCraftJSON(json));
+      setLoadedStrategy(toLoad);
+      localStorage.setItem('last_strategy', toLoad);
+    } catch (e) {
+      console.error("Auto-load failed", e);
+    }
+  };
+
   // On mount, check if password already in sessionStorage or if we are in local dev
   useEffect(() => {
-    // Vite sets import.meta.env.DEV to true in development
     const isDev = (import.meta as any).env.DEV;
     
-    if (isDev) {
-      apiListStrategies()
-        .then((list) => { 
-          setStrategies(list); 
-          setAuth('ok'); 
-        })
-        .catch((e) => { 
-          setError(`API Local no disponible: ${e.message}. Asegúrate de ejecutar "npm run dev" en la raíz.`); 
-          setAuth('ok'); // Still set to ok so we don't see the password gate
-        });
-      return;
-    }
+    const initialize = async () => {
+      try {
+        const list = await apiListStrategies();
+        setStrategies(list);
+        
+        if (isDev) {
+          setAuth('ok');
+          await autoLoad(list);
+        } else {
+          const pw = sessionStorage.getItem('site_password');
+          if (pw) {
+            setAuth('ok');
+            await autoLoad(list);
+          } else {
+            setAuth('prompt');
+          }
+        }
+      } catch (e: any) {
+        if (isDev) setAuth('ok');
+        else setAuth('prompt');
+        setError(e.message);
+      }
+    };
 
-    const pw = sessionStorage.getItem('site_password');
-    if (pw) {
-      apiListStrategies()
-        .then((list) => { setStrategies(list); setAuth('ok'); })
-        .catch((e) => {
-          if (e.message === 'UNAUTHORIZED') { sessionStorage.removeItem('site_password'); setAuth('prompt'); }
-          else { setAuth('prompt'); }
-        });
-    } else {
-      setAuth('prompt');
-    }
+    initialize();
   }, []);
 
   async function login(password: string): Promise<boolean> {
@@ -65,6 +83,7 @@ export function useAppState(): UseAppState {
       const list = await apiListStrategies();
       setStrategies(list);
       setAuth('ok');
+      await autoLoad(list);
       return true;
     } catch {
       sessionStorage.removeItem('site_password');
@@ -86,6 +105,7 @@ export function useAppState(): UseAppState {
       const json = await apiGetStrategy(name) as RangeCraftJSON;
       setPositions(parseRangeCraftJSON(json));
       setLoadedStrategy(name);
+      localStorage.setItem('last_strategy', name);
       setError(null);
     } catch (e) {
       setError(`Error al cargar "${name}": ${e}`);
@@ -99,7 +119,11 @@ export function useAppState(): UseAppState {
 
   async function deleteStrategy(name: string) {
     await apiDeleteStrategy(name);
-    if (loadedStrategy === name) { setPositions(null); setLoadedStrategy(null); }
+    if (loadedStrategy === name) { 
+      setPositions(null); 
+      setLoadedStrategy(null); 
+      localStorage.removeItem('last_strategy');
+    }
     await refreshList();
   }
 
@@ -109,6 +133,7 @@ export function useAppState(): UseAppState {
     const parsed = parseRangeCraftJSON(json);
     setPositions(parsed);
     setLoadedStrategy(name);
+    localStorage.setItem('last_strategy', name);
   }
 
   return { auth, login, strategies, loadedStrategy, positions, loadStrategy, saveStrategy, deleteStrategy, importJSON, refreshList, error };

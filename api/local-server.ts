@@ -61,6 +61,24 @@ const server = http.createServer(async (req, res) => {
           break;
         }
 
+        case 'PUT': {
+          let body = '';
+          req.on('data', chunk => body += chunk);
+          req.on('end', async () => {
+            try {
+              const { name, newName } = JSON.parse(body);
+              if (!name || !newName) return res.writeHead(400).end('name and newName required');
+              const oldPath = path.join(STRATEGIES_DIR, `${name}.json`);
+              const newPath = path.join(STRATEGIES_DIR, `${newName}.json`);
+              await fs.rename(oldPath, newPath);
+              res.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify({ ok: true }));
+            } catch (e) {
+              res.writeHead(500).end(String(e));
+            }
+          });
+          break;
+        }
+
         case 'DELETE': {
           if (!strategyName) return res.writeHead(400).end('name required');
           const filePath = path.join(STRATEGIES_DIR, `${strategyName}.json`);

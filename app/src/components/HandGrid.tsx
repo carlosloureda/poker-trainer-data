@@ -5,12 +5,9 @@ import { getHandMatrix } from '../core/pokerLogic';
 const MATRIX = getHandMatrix();
 
 interface HandGridProps {
-  /** Resolved combos: comboId → { actionType: frequency } */
   combos: ResolvedCombos;
-  /** Size variant: sm, md, lg or 'auto' for responsive */
   size?: 'sm' | 'md' | 'lg' | 'auto';
-  /** Called when a cell is clicked */
-  onCellClick?: (comboId: string) => void;
+  onCellClick?: (comboId: string, actions: Record<string, number>) => void;
 }
 
 export function HandGrid({ combos, size = 'md', onCellClick }: HandGridProps) {
@@ -19,14 +16,14 @@ export function HandGrid({ combos, size = 'md', onCellClick }: HandGridProps) {
       {MATRIX.map((comboId) => {
         const actions = combos[comboId] ?? {};
         const activeActions = Object.entries(actions).filter(([, f]) => f > 0);
-        const isEmpty = activeActions.length === 0;
-        const isPair = comboId.length === 2;
+        
+        let cumulativeHeight = 0;
 
         return (
           <div
             key={comboId}
-            className={`hand-cell ${isPair ? 'pair' : comboId.endsWith('s') ? 'suited' : 'offsuit'}`}
-            onClick={() => onCellClick?.(comboId)}
+            className={`hand-cell ${comboId.length === 2 ? 'pair' : comboId.endsWith('s') ? 'suited' : 'offsuit'}`}
+            onClick={() => onCellClick?.(comboId, actions)}
             style={{
               width: 'var(--cell)',
               height: 'var(--cell)',
@@ -34,25 +31,23 @@ export function HandGrid({ combos, size = 'md', onCellClick }: HandGridProps) {
               cursor: onCellClick ? 'pointer' : 'default',
             }}
           >
-            {/* Action fill layers (bottom-up) */}
-            {!isEmpty && (() => {
-              let usedPct = 0;
-              return activeActions.map(([actionId, freq]) => {
-                const bottom = usedPct;
-                usedPct += freq * 100;
-                return (
-                  <div
-                    key={actionId}
-                    className="hand-fill"
-                    style={{
-                      height: `${freq * 100}%`,
-                      backgroundColor: ACTION_COLORS[actionId] ?? '#64748b',
-                      bottom: `${bottom}%`
-                    }}
-                  />
-                );
-              });
-            })()}
+            {activeActions.map(([action, freq]) => {
+              const height = freq * 100;
+              const bottom = cumulativeHeight;
+              cumulativeHeight += height;
+              
+              return (
+                <div 
+                  key={action}
+                  className="hand-fill" 
+                  style={{ 
+                    backgroundColor: ACTION_COLORS[action] || '#64748b',
+                    height: `${height}%`,
+                    bottom: `${bottom}%` 
+                  }} 
+                />
+              );
+            })}
 
             <span className="hand-label">{comboId}</span>
           </div>
