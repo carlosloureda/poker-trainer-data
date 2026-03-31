@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { ResolvedPosition, ResolvedSituation, ResolvedCombos } from '../core/models';
 import { ACTION_COLORS, POSITION_LABELS } from '../core/models';
+import { actionLabel, situationLabel } from '../core/labels';
 import { HandGrid } from './HandGrid';
 
 interface PositionPageProps {
@@ -17,7 +18,7 @@ function ActionLegend({ combos }: { combos: ResolvedCombos }) {
       {[...actions].map((a) => (
         <span key={a} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: '#94a3b8' }}>
           <span style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: ACTION_COLORS[a] ?? '#64748b', display: 'inline-block' }} />
-          {a.replace(/_/g, ' ')}
+          {actionLabel(a)}
         </span>
       ))}
     </div>
@@ -64,7 +65,7 @@ function SituationCard({ situation, onClick }: { situation: ResolvedSituation; o
       }}
     >
       <p style={{ color: '#94a3b8', fontSize: '0.7rem', marginBottom: '0.5rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-        {situation.label}
+        {situationLabel(situation.key)}
       </p>
       <HandGrid combos={situation.combos} size="sm" />
     </div>
