@@ -14,12 +14,12 @@ function ActionLegend({ combos }: { combos: ResolvedCombos }) {
   Object.values(combos).forEach((a) => Object.keys(a).forEach((k) => actions.add(k)));
 
   return (
-    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '0.5rem' }}>
+    <div className="action-legend">
       {[...actions].map((a) => (
-        <span key={a} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: '#94a3b8' }}>
-          <span style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: ACTION_COLORS[a] ?? '#64748b', display: 'inline-block' }} />
+        <div key={a} className="action-legend__item">
+          <div className="action-legend__dot" style={{ backgroundColor: ACTION_COLORS[a] ?? '#64748b' }} />
           {actionLabel(a)}
-        </span>
+        </div>
       ))}
     </div>
   );
@@ -28,19 +28,13 @@ function ActionLegend({ combos }: { combos: ResolvedCombos }) {
 /** The expanded grid panel that appears when clicking a situation */
 function SituationPanel({ situation, onClose }: { situation: ResolvedSituation; onClose: () => void }) {
   return (
-    <div style={{
-      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100,
-    }} onClick={onClose}>
-      <div
-        style={{ background: '#1e293b', borderRadius: 10, padding: '1.5rem', border: '1px solid #334155' }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h3 style={{ color: '#f8fafc', margin: 0 }}>{situation.label}</h3>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '1.2rem' }}>✕</button>
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h3>{situationLabel(situation.key)}</h3>
+          <button className="modal-close" onClick={onClose}>✕</button>
         </div>
-        <HandGrid combos={situation.combos} size="md" />
+        <HandGrid combos={situation.combos} size="lg" />
         <ActionLegend combos={situation.combos} />
       </div>
     </div>
@@ -49,22 +43,9 @@ function SituationPanel({ situation, onClose }: { situation: ResolvedSituation; 
 
 /** One card showing a small situation grid with its label */
 function SituationCard({ situation, onClick }: { situation: ResolvedSituation; onClick: () => void }) {
-  const [hovered, setHovered] = useState(false);
   return (
-    <div
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        background: hovered ? '#1e293b' : '#0f172a',
-        border: `1px solid ${hovered ? '#475569' : '#334155'}`,
-        borderRadius: 8,
-        padding: '0.75rem',
-        cursor: 'pointer',
-        transition: 'border-color 0.15s, background 0.15s',
-      }}
-    >
-      <p style={{ color: '#94a3b8', fontSize: '0.7rem', marginBottom: '0.5rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+    <div className="situation-card" onClick={onClick}>
+      <p className="situation-card__label">
         {situationLabel(situation.key)}
       </p>
       <HandGrid combos={situation.combos} size="sm" />
@@ -77,25 +58,32 @@ export function PositionPage({ data }: PositionPageProps) {
   const label = POSITION_LABELS[data.position];
 
   return (
-    <div>
+    <div className="main-scroll">
       {/* Open range section */}
       {data.open && (
-        <section style={{ marginBottom: '2rem' }}>
-          <h3 style={{ color: '#94a3b8', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>
+        <section style={{ marginBottom: '2.5rem' }}>
+          <h2 className="section-title">
             {label} Open Range (RFI)
-          </h3>
-          <HandGrid combos={data.open} size="lg" />
-          <ActionLegend combos={data.open} />
+          </h2>
+          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+            <HandGrid combos={data.open} size="lg" />
+            <div style={{ marginTop: '0.5rem' }}>
+               <ActionLegend combos={data.open} />
+               <p style={{ marginTop: '1rem', fontSize: '0.85rem', color: 'var(--text-muted)', maxWidth: '300px' }}>
+                 Este es tu rango estándar de apertura desde esta posición cuando nadie ha entrado en el bote.
+               </p>
+            </div>
+          </div>
         </section>
       )}
 
       {/* Response situations */}
       {data.situations.length > 0 && (
         <section>
-          <h3 style={{ color: '#94a3b8', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>
+          <h2 className="section-title">
             Respuestas desde {label}
-          </h3>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+          </h2>
+          <div className="situation-grid">
             {data.situations.map((sit) => (
               <SituationCard key={sit.key} situation={sit} onClick={() => setExpandedSituation(sit)} />
             ))}

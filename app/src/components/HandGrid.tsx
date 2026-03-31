@@ -7,26 +7,30 @@ const MATRIX = getHandMatrix();
 interface HandGridProps {
   /** Resolved combos: comboId → { actionType: frequency } */
   combos: ResolvedCombos;
-  /** Size variant */
-  size?: 'sm' | 'md' | 'lg';
-  /** Called when a cell is clicked (optional — for read-only grids just omit) */
+  /** Size variant: sm, md, lg or 'auto' for responsive */
+  size?: 'sm' | 'md' | 'lg' | 'auto';
+  /** Called when a cell is clicked */
   onCellClick?: (comboId: string) => void;
 }
 
-const CELL_SIZE: Record<string, number> = { sm: 28, md: 40, lg: 52 };
-const FONT_SIZE: Record<string, string> = { sm: '0.6rem', md: '0.75rem', lg: '0.85rem' };
-
 export function HandGrid({ combos, size = 'md', onCellClick }: HandGridProps) {
-  const cellPx = CELL_SIZE[size];
-  const fontSize = FONT_SIZE[size];
+  // We use CSS variables defined in index.css, but we can override them locally if needed via inline style
+  const sizeStyles: Record<string, any> = {
+    sm: { '--cell': '24px', '--cell-font': '0.55rem' },
+    md: { '--cell': '34px', '--cell-font': '0.7rem' },
+    lg: { '--cell': '44px', '--cell-font': '0.85rem' },
+    auto: {} // Uses global media query defaults
+  };
 
   return (
     <div
+      className="range-grid-container"
       style={{
+        ...sizeStyles[size],
         display: 'grid',
-        gridTemplateColumns: `repeat(13, ${cellPx}px)`,
-        gap: '2px',
-        userSelect: 'none',
+        gridTemplateColumns: 'repeat(13, var(--cell))',
+        gap: '1px',
+        width: 'fit-content'
       }}
       onDragStart={(e) => e.preventDefault()}
     >
@@ -34,23 +38,18 @@ export function HandGrid({ combos, size = 'md', onCellClick }: HandGridProps) {
         const actions = combos[comboId] ?? {};
         const activeActions = Object.entries(actions).filter(([, f]) => f > 0);
         const isEmpty = activeActions.length === 0;
-
         const isPair = comboId.length === 2;
 
         return (
           <div
             key={comboId}
+            className={`hand-cell ${isPair ? 'pair' : comboId.endsWith('s') ? 'suited' : 'offsuit'}`}
             onClick={() => onCellClick?.(comboId)}
             style={{
-              width: cellPx,
-              height: cellPx,
-              position: 'relative',
-              overflow: 'hidden',
-              borderRadius: 3,
-              border: '1px solid #334155',
+              width: 'var(--cell)',
+              height: 'var(--cell)',
+              fontSize: 'var(--cell-font)',
               cursor: onCellClick ? 'pointer' : 'default',
-              backgroundColor: isPair ? '#334155' : '#1e293b',
-              flexShrink: 0,
             }}
           >
             {/* Action fill layers (bottom-up) */}
@@ -62,36 +61,18 @@ export function HandGrid({ combos, size = 'md', onCellClick }: HandGridProps) {
                 return (
                   <div
                     key={actionId}
+                    className="hand-fill"
                     style={{
-                      position: 'absolute',
-                      bottom: `${bottom}%`,
-                      left: 0,
-                      width: '100%',
                       height: `${freq * 100}%`,
                       backgroundColor: ACTION_COLORS[actionId] ?? '#64748b',
+                      bottom: `${bottom}%`
                     }}
                   />
                 );
               });
             })()}
 
-            {/* Label */}
-            <span
-              style={{
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize,
-                fontWeight: 600,
-                color: isEmpty ? '#475569' : '#f8fafc',
-                textShadow: isEmpty ? 'none' : '0 1px 2px rgba(0,0,0,0.7)',
-                lineHeight: 1,
-              }}
-            >
-              {comboId}
-            </span>
+            <span className="hand-label">{comboId}</span>
           </div>
         );
       })}
