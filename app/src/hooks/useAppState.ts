@@ -30,11 +30,19 @@ export function useAppState(): UseAppState {
 
   // On mount, check if password already in sessionStorage or if we are in local dev
   useEffect(() => {
-    const isLocal = window.location.hostname === 'localhost';
-    if (isLocal) {
+    // Vite sets import.meta.env.DEV to true in development
+    const isDev = (import.meta as any).env.DEV;
+    
+    if (isDev) {
       apiListStrategies()
-        .then((list) => { setStrategies(list); setAuth('ok'); })
-        .catch((e) => { setError(`Error connecting to local API: ${e.message}`); setAuth('prompt'); });
+        .then((list) => { 
+          setStrategies(list); 
+          setAuth('ok'); 
+        })
+        .catch((e) => { 
+          setError(`API Local no disponible: ${e.message}. Asegúrate de ejecutar "npm run dev" en la raíz.`); 
+          setAuth('ok'); // Still set to ok so we don't see the password gate
+        });
       return;
     }
 

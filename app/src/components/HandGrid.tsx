@@ -14,26 +14,8 @@ interface HandGridProps {
 }
 
 export function HandGrid({ combos, size = 'md', onCellClick }: HandGridProps) {
-  // We use CSS variables defined in index.css, but we can override them locally if needed via inline style
-  const sizeStyles: Record<string, any> = {
-    sm: { '--cell': '24px', '--cell-font': '0.55rem' },
-    md: { '--cell': '34px', '--cell-font': '0.7rem' },
-    lg: { '--cell': '44px', '--cell-font': '0.85rem' },
-    auto: {} // Uses global media query defaults
-  };
-
   return (
-    <div
-      className="range-grid-container"
-      style={{
-        ...sizeStyles[size],
-        display: 'grid',
-        gridTemplateColumns: 'repeat(13, var(--cell))',
-        gap: '1px',
-        width: 'fit-content'
-      }}
-      onDragStart={(e) => e.preventDefault()}
-    >
+    <div className={`range-grid-container size-${size}`}>
       {MATRIX.map((comboId) => {
         const actions = combos[comboId] ?? {};
         const activeActions = Object.entries(actions).filter(([, f]) => f > 0);
