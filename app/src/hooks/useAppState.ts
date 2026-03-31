@@ -15,6 +15,7 @@ interface UseAppState {
   positions: ResolvedPosition[] | null;
   loadStrategy: (name: string) => Promise<void>;
   saveStrategy: (name: string, json: RangeCraftJSON) => Promise<void>;
+  renameStrategy: (name: string, newName: string) => Promise<void>;
   deleteStrategy: (name: string) => Promise<void>;
   importJSON: (json: RangeCraftJSON, name: string) => Promise<void>;
   refreshList: () => Promise<void>;

@@ -34,6 +34,16 @@ export async function apiSaveStrategy(name: string, data: unknown): Promise<void
   if (!res.ok) throw new Error(`Error saving: ${res.status}`);
 }
 
+export async function apiRenameStrategy(name: string, newName: string): Promise<void> {
+  const res = await fetch(BASE, {
+    method: 'PUT',
+    headers: authHeader(),
+    body: JSON.stringify({ name, newName }),
+  });
+  if (res.status === 401) throw new Error('UNAUTHORIZED');
+  if (!res.ok) throw new Error(`Error renaming: ${res.status}`);
+}
+
 export async function apiDeleteStrategy(name: string): Promise<void> {
   const res = await fetch(`${BASE}?name=${encodeURIComponent(name)}`, {
     method: 'DELETE',
