@@ -28,8 +28,16 @@ export function useAppState(): UseAppState {
   const [positions, setPositions] = useState<ResolvedPosition[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // On mount, check if password already in sessionStorage
+  // On mount, check if password already in sessionStorage or if we are in local dev
   useEffect(() => {
+    const isLocal = window.location.hostname === 'localhost';
+    if (isLocal) {
+      apiListStrategies()
+        .then((list) => { setStrategies(list); setAuth('ok'); })
+        .catch((e) => { setError(`Error connecting to local API: ${e.message}`); setAuth('prompt'); });
+      return;
+    }
+
     const pw = sessionStorage.getItem('site_password');
     if (pw) {
       apiListStrategies()

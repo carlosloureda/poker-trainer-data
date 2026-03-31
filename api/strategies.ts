@@ -1,8 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { listStrategies, getStrategy, saveStrategy, deleteStrategy } from './_github';
 
-/** Check the Authorization header matches SITE_PASSWORD */
+/** Check the Authorization header matches SITE_PASSWORD or skip in local dev */
 function isAuthorized(req: VercelRequest): boolean {
+  if (process.env.NODE_ENV === 'development') return true;
   const auth = req.headers['authorization'] ?? '';
   return auth === `Bearer ${process.env.SITE_PASSWORD}`;
 }
