@@ -43,14 +43,61 @@ function PasswordGate({ onLogin }: { onLogin: (pw: string) => Promise<boolean> }
 }
 
 // ─── Strategy Library ─────────────────────────────────────────────────────────
+function StrategyItem({ 
+  name, isActive, onLoad, onRename, onDelete 
+}: { 
+  name: string, isActive: boolean, onLoad: (n: string) => void, onRename: (n: string) => void, onDelete: (n: string) => void 
+}) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = () => setMenuOpen(false);
+    window.addEventListener('click', close);
+    return () => window.removeEventListener('click', close);
+  }, [menuOpen]);
+
+  return (
+    <div className={`strategy-item ${isActive ? 'active' : ''}`}>
+      <button onClick={() => onLoad(name)} className="strategy-btn-main">
+        {name}
+      </button>
+      <button 
+        className={`strategy-btn-more ${menuOpen ? 'open' : ''}`}
+        onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen); }}
+      >
+        •••
+      </button>
+      {menuOpen && (
+        <div className="strategy-dropdown">
+          <button className="dropdown-item" onClick={() => {
+            const newName = prompt('Nuevo nombre:', name);
+            if (newName && newName !== name) onRename(newName);
+          }}>
+            ✎ Renombrar
+          </button>
+          <button className="dropdown-item delete" onClick={() => {
+            if (confirm(`¿Estás seguro de que quieres borrar "${name}"?`)) {
+              onDelete(name);
+            }
+          }}>
+            ✕ Borrar
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function LibrarySidebar({
-  strategies, loadedStrategy, onLoad, onImport, onDelete
+  strategies, loadedStrategy, onLoad, onImport, onDelete, onRename
 }: {
   strategies: { name: string }[];
   loadedStrategy: string | null;
   onLoad: (name: string) => void;
   onImport: (json: unknown, name: string) => void;
   onDelete: (name: string) => void;
+  onRename: (name: string, newName: string) => void;
 }) {
   const [importing, setImporting] = useState(false);
   const [newName, setNewName] = useState('');
@@ -81,43 +128,43 @@ function LibrarySidebar({
   }
 
   return (
-    <div className="library-sidebar" style={{ padding: '1rem' }}>
-      <p style={{ color: 'var(--text-dim)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Estrategias</p>
-      <div style={{ flex: 1 }}>
+    <div className="library-sidebar" style={{ padding: '0.5rem 0' }}>
+      <p style={{ color: 'var(--text-dim)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0.5rem 1.2rem 1rem' }}>Estrategias</p>
+      <div style={{ flex: 1, overflowY: 'auto' }}>
         {strategies.map((s) => (
-          <div key={s.name} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.25rem' }}>
-            <button
-              onClick={() => onLoad(s.name)}
-              className="btn"
-              style={{ flex: 1, textAlign: 'left', border: 'none', background: loadedStrategy === s.name ? 'var(--panel)' : 'transparent', color: loadedStrategy === s.name ? 'var(--text)' : 'var(--text-muted)' }}
-            >
-              {s.name}
-            </button>
-            <button onClick={() => onDelete(s.name)} style={{ padding: '0.2rem 0.4rem', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', fontSize: '0.7rem' }}>✕</button>
-          </div>
+          <StrategyItem 
+            key={s.name}
+            name={s.name}
+            isActive={loadedStrategy === s.name}
+            onLoad={onLoad}
+            onRename={(nn) => onRename(s.name, nn)}
+            onDelete={onDelete}
+          />
         ))}
-        {strategies.length === 0 && <p style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>No hay estrategias.</p>}
+        {strategies.length === 0 && <p style={{ color: 'var(--text-dim)', fontSize: '0.75rem', padding: '0 1.2rem' }}>No hay estrategias.</p>}
       </div>
 
-      {importing ? (
-        <div style={{ marginTop: '1rem' }}>
-          <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Nombre" className="quick-select" style={{ width: '100%', marginBottom: '0.5rem' }} />
-          <button onClick={confirmImport} className="btn btn-primary" style={{ width: '100%', marginBottom: '0.3rem' }}>Guardar</button>
-          <button onClick={() => setImporting(false)} className="btn" style={{ width: '100%' }}>Cancelar</button>
-        </div>
-      ) : (
-        <label className="btn" style={{ marginTop: 'auto', textAlign: 'center' }}>
-          + Importar
-          <input type="file" accept=".json" onChange={handleFile} style={{ display: 'none' }} />
-        </label>
-      )}
+      <div style={{ padding: '1rem' }}>
+        {importing ? (
+          <div>
+            <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Nombre" className="quick-select" style={{ width: '100%', marginBottom: '0.5rem' }} />
+            <button onClick={confirmImport} className="btn btn-primary" style={{ width: '100%', marginBottom: '0.3rem' }}>Guardar</button>
+            <button onClick={() => setImporting(false)} className="btn" style={{ width: '100%' }}>Cancelar</button>
+          </div>
+        ) : (
+          <label className="btn" style={{ display: 'block', textAlign: 'center' }}>
+            + Importar
+            <input type="file" accept=".json" onChange={handleFile} style={{ display: 'none' }} />
+          </label>
+        )}
+      </div>
     </div>
   );
 }
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
-  const { auth, login, strategies, loadedStrategy, positions, loadStrategy, deleteStrategy, importJSON, error } = useAppState();
+  const { auth, login, strategies, loadedStrategy, positions, loadStrategy, renameStrategy, deleteStrategy, importJSON, error } = useAppState();
   const [activePos, setActivePos] = useState<Position>('utg');
   const [view, setView] = useState<'study' | 'quick'>('study');
 
@@ -156,6 +203,7 @@ export default function App() {
           onLoad={loadStrategy}
           onImport={(json, name) => importJSON(json as RangeCraftJSON, name)}
           onDelete={deleteStrategy}
+          onRename={renameStrategy}
         />
 
         <div className="content-panel">

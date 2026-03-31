@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiListStrategies, apiGetStrategy, apiSaveStrategy, apiDeleteStrategy } from '../api/strategies';
+import { apiListStrategies, apiGetStrategy, apiSaveStrategy, apiDeleteStrategy, apiRenameStrategy } from '../api/strategies';
 import type { RangeCraftJSON, ResolvedPosition } from '../core/models';
 import { parseRangeCraftJSON } from '../core/rangeAdapter';
 
@@ -137,5 +137,18 @@ export function useAppState(): UseAppState {
     localStorage.setItem('last_strategy', name);
   }
 
-  return { auth, login, strategies, loadedStrategy, positions, loadStrategy, saveStrategy, deleteStrategy, importJSON, refreshList, error };
+  async function renameStrategy(name: string, newName: string) {
+    try {
+      await apiRenameStrategy(name, newName);
+      if (loadedStrategy === name) {
+        setLoadedStrategy(newName);
+        localStorage.setItem('last_strategy', newName);
+      }
+      await refreshList();
+    } catch (e) {
+      setError(`Error al renombrar: ${e}`);
+    }
+  }
+
+  return { auth, login, strategies, loadedStrategy, positions, loadStrategy, saveStrategy, renameStrategy, deleteStrategy, importJSON, refreshList, error };
 }
