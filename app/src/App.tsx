@@ -180,8 +180,16 @@ function LibrarySidebar({
 export default function App() {
   const { auth, login, strategies, loadedStrategy, positions, loadStrategy, createStrategy, updateStrategy, renameStrategy, deleteStrategy, importJSON, error } = useAppState();
   const [activePos, setActivePos] = useState<Position>('utg');
-  const [view, setView] = useState<'study' | 'quick'>('quick');
+  const [view, setView] = useState<'study' | 'quick' | 'print'>('quick');
   const [isEditing, setIsEditing] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
+
+  // Auto-close on mobile when loading a strategy
+  const handleLoad = (name: string) => {
+    loadStrategy(name);
+    setIsEditing(false);
+    if (window.innerWidth <= 768) setSidebarOpen(false);
+  };
 
   useEffect(() => {
     if (positions && positions.length > 0) {
@@ -204,14 +212,26 @@ export default function App() {
   const activeData = positions?.find((p) => p.position === activePos);
 
   return (
-    <div className="app">
+    <div className={`app ${sidebarOpen ? 'sidebar-visible' : 'sidebar-hidden'}`}>
       <header className="app-header">
-        <span className="app-header__logo">♠ Poker Trainer</span>
+        <button className="btn-icon" onClick={() => setSidebarOpen(!sidebarOpen)}>
+          {sidebarOpen ? '✕' : '☰'}
+        </button>
+        <span className="app-header__logo" onClick={() => setView('quick')} style={{ cursor: 'pointer' }}>
+          <span className="desktop-only" style={{ marginRight: '0.2rem' }}>♠</span> <span>Poker Trainer</span>
+        </span>
         {loadedStrategy && <span className="app-header__strategy">{loadedStrategy}</span>}
         
         <div className="view-switcher">
-          <button className={view === 'quick' ? 'active' : ''} onClick={() => { setView('quick'); setIsEditing(false); }}>Play Mode</button>
-          <button className={view === 'study' ? 'active' : ''} onClick={() => { setView('study'); setIsEditing(false); }}>Estudio</button>
+          <button className={view === 'quick' ? 'active' : ''} onClick={() => { setView('quick'); setIsEditing(false); }}>
+            <span className="desktop-only">Play Mode</span><span className="mobile-only">Play</span>
+          </button>
+          <button className={view === 'study' ? 'active' : ''} onClick={() => { setView('study'); setIsEditing(false); }}>
+            <span className="desktop-only">Estudio</span><span className="mobile-only">Estudio</span>
+          </button>
+          <button className={view === 'print' ? 'active' : ''} onClick={() => { setView('print'); setIsEditing(false); }}>
+            <span className="desktop-only">Print Builder</span><span className="mobile-only">Print</span>
+          </button>
         </div>
 
         {error && <span className="app-header__error">{error}</span>}
@@ -221,8 +241,8 @@ export default function App() {
         <LibrarySidebar
           strategies={strategies}
           loadedStrategy={loadedStrategy}
-          onLoad={(name) => { loadStrategy(name); setIsEditing(false); }}
-          onImport={(json, name) => { importJSON(json as RangeCraftJSON, name); setIsEditing(false); }}
+          onLoad={handleLoad}
+          onImport={(json, name) => { importJSON(json as RangeCraftJSON, name); setIsEditing(false); if (window.innerWidth <= 768) setSidebarOpen(false); }}
           onDelete={deleteStrategy}
           onRename={renameStrategy}
           onCreate={createStrategy}
@@ -235,7 +255,11 @@ export default function App() {
             </div>
           ) : (
             <>
-              {view === 'study' ? (
+              {view === 'print' ? (
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-dim)' }}>
+                   <h3>TODO: sin implementar</h3>
+                </div>
+              ) : view === 'study' ? (
                 <>
                   <nav className="pos-tabs">
                     {POSITIONS.map((pos) => {

@@ -64,12 +64,15 @@ function SituationPanel({
   const [paintAction, setPaintAction] = useState<string>('3bet');
   const [localCombos, setLocalCombos] = useState<ResolvedCombos>(JSON.parse(JSON.stringify(situation.combos)));
 
-  const handleCellClick = (hand: string, current: Record<string, number>) => {
+  const handleCellClick = (hand: string) => {
     if (!isEditing) return;
     const newCombos = { ...localCombos };
-    if (paintAction === 'fold' || Object.keys(current).length === 0) {
+    
+    // Si la mano ya tiene la acción seleccionada o queremos borrar (fold), la quitamos
+    if (paintAction === 'fold' || (newCombos[hand] && newCombos[hand][paintAction])) {
        delete newCombos[hand];
     } else {
+       // Si no, pintamos la acción seleccionada (reemplazando lo que hubiera)
        newCombos[hand] = { [paintAction]: 1 };
     }
     setLocalCombos(newCombos);
@@ -90,7 +93,7 @@ function SituationPanel({
         <div style={{ display: 'flex', gap: '2rem', padding: '1rem' }}>
           <HandGrid 
             combos={localCombos} 
-            size="lg" 
+            size="auto" 
             onCellClick={isEditing ? handleCellClick : undefined} 
           />
           <div style={{ flex: 1 }}>
@@ -165,7 +168,7 @@ export function PositionPage({ data, isEditing, onToggleEdit, onUpdate }: Positi
         <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
           <HandGrid 
             combos={data.open || {}} 
-            size="lg" 
+            size="auto" 
             onCellClick={isEditing ? (h) => {
               const newCombos = { ...(data.open || {}) };
               if (newCombos[h]) delete newCombos[h]; else newCombos[h] = { open: 1 };
