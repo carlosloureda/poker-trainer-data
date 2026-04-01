@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiListStrategies, apiGetStrategy, apiSaveStrategy, apiDeleteStrategy, apiRenameStrategy } from '../api/strategies';
 import type { RangeCraftJSON, ResolvedPosition } from '../core/models';
-import { parseRangeCraftJSON } from '../core/rangeAdapter';
+import { parseRangeCraftJSON, unparseRangeCraftJSON } from '../core/rangeAdapter';
 
 export type AuthState = 'checking' | 'prompt' | 'ok';
 
@@ -15,6 +15,8 @@ interface UseAppState {
   positions: ResolvedPosition[] | null;
   loadStrategy: (name: string) => Promise<void>;
   saveStrategy: (name: string, json: RangeCraftJSON) => Promise<void>;
+  createStrategy: (name: string) => Promise<void>;
+  updateStrategy: (name: string, positions: ResolvedPosition[]) => Promise<void>;
   renameStrategy: (name: string, newName: string) => Promise<void>;
   deleteStrategy: (name: string) => Promise<void>;
   importJSON: (json: RangeCraftJSON, name: string) => Promise<void>;
@@ -150,5 +152,28 @@ export function useAppState(): UseAppState {
     }
   }
 
-  return { auth, login, strategies, loadedStrategy, positions, loadStrategy, saveStrategy, renameStrategy, deleteStrategy, importJSON, refreshList, error };
+  async function createStrategy(name: string) {
+    const emptyJson: RangeCraftJSON = {
+      Range_Craft: {
+        utg: { open: [] },
+        hj: {}, co: {}, btn: {}, sb: {}, bb: {}
+      }
+    };
+    await apiSaveStrategy(name, emptyJson);
+    await refreshList();
+    await loadStrategy(name);
+  }
+
+  async function updateStrategy(name: string, updatedPositions: ResolvedPosition[]) {
+    try {
+      const json = unparseRangeCraftJSON(updatedPositions);
+      await apiSaveStrategy(name, json);
+      // We don't necessarily need to reload everything, but let's refresh positions state
+      setPositions([...updatedPositions]); 
+    } catch (e) {
+      setError(`Error al guardar: ${e}`);
+    }
+  }
+
+  return { auth, login, strategies, loadedStrategy, positions, loadStrategy, saveStrategy, createStrategy, updateStrategy, renameStrategy, deleteStrategy, importJSON, refreshList, error };
 }

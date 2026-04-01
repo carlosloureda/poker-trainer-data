@@ -448,3 +448,15 @@ body {
 .dropdown-item.delete:hover {
   background: rgba(248, 113, 113, 0.1);
 }
+
+/* Editor Styles */
+.action-legend__item.editable:hover {
+  background: var(--panel);
+  box-shadow: 0 0 10px rgba(255,255,255,0.05);
+}
+
+.action-legend__item.active-paint {
+  background: var(--panel) !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+  transform: scale(1.05);
+}

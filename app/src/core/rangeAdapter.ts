@@ -4,8 +4,6 @@ import { parseRangeArray } from './pokerLogic';
 
 /**
  * Convert a raw situation (flat array OR object of arrays) into ResolvedCombos.
- * For a flat array (open range), all combos get action key "open".
- * For an object, each key is the action type.
  */
 function resolveSituation(raw: string[] | Record<string, string[]>): ResolvedCombos {
   const combos: ResolvedCombos = {};
@@ -35,8 +33,7 @@ function situationLabel(key: string): string {
 }
 
 /**
- * Parse the full RangeCraftJSON into an array of ResolvedPosition,
- * one per position that exists in the JSON.
+ * Parse the full RangeCraftJSON into an array of ResolvedPosition.
  */
 export function parseRangeCraftJSON(json: RangeCraftJSON): ResolvedPosition[] {
   const rawData = json.Range_Craft;
@@ -66,4 +63,49 @@ export function parseRangeCraftJSON(json: RangeCraftJSON): ResolvedPosition[] {
   }
 
   return result;
+}
+
+/**
+ * Convert ResolvedCombos back to the notation structure { action: ["hand", "hand:freq"] }
+ */
+function unresolveSituation(combos: ResolvedCombos): string[] | Record<string, string[]> {
+  const actions: Record<string, string[]> = {};
+
+  for (const [hand, weights] of Object.entries(combos)) {
+    for (const [action, freq] of Object.entries(weights)) {
+      if (!actions[action]) actions[action] = [];
+      const notation = freq === 1 ? hand : `${hand}:${freq}`;
+      actions[action].push(notation);
+    }
+  }
+
+  const keys = Object.keys(actions);
+  if (keys.length === 1 && keys[0] === 'open') {
+    return actions.open;
+  }
+
+  return actions;
+}
+
+/**
+ * Reverse of parseRangeCraftJSON. Converts internal state back to JSON.
+ */
+export function unparseRangeCraftJSON(positions: ResolvedPosition[]): RangeCraftJSON {
+  const rangeCraft: Record<string, any> = {};
+
+  for (const pos of positions) {
+    const posData: Record<string, any> = {};
+    
+    if (pos.open) {
+      posData.open = unresolveSituation(pos.open);
+    }
+
+    for (const sit of pos.situations) {
+      posData[sit.key] = unresolveSituation(sit.combos);
+    }
+
+    rangeCraft[pos.position] = posData;
+  }
+
+  return { Range_Craft: rangeCraft };
 }

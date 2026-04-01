@@ -105,6 +105,34 @@ export function parseRangeNotation(notation: string): Record<string, number> {
     return result;
   }
 
+  // Generic specific e.g. "AK", "JT" (matches both suited and offsuit)
+  const genericMatch = str.match(/^([AKQJT98765432])([AKQJT98765432])$/);
+  if (genericMatch) {
+    const r1 = genericMatch[1];
+    const r2 = genericMatch[2];
+    if (r1 !== r2) {
+      result[`${r1}${r2}s`] = freq;
+      result[`${r1}${r2}o`] = freq;
+      return result;
+    }
+  }
+
+  // Generic plus e.g. "AQ+" (matches AQs+ and AQo+)
+  const genericPlusMatch = str.match(/^([AKQJT98765432])([AKQJT98765432])\+$/);
+  if (genericPlusMatch) {
+    const r1 = genericPlusMatch[1] as Rank;
+    const r2 = genericPlusMatch[2] as Rank;
+    const r1Idx = RANK_INDEX[r1];
+    const r2Idx = RANK_INDEX[r2];
+    if (r1 !== r2) {
+      for (let i = r2Idx; i > r1Idx; i--) {
+        result[`${r1}${RANKS[i]}s`] = freq;
+        result[`${r1}${RANKS[i]}o`] = freq;
+      }
+      return result;
+    }
+  }
+
   console.warn(`[rangeParser] Could not parse: "${notation}"`);
   return result;
 }

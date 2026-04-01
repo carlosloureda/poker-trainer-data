@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { RangeCraftJSON, Position } from './core/models';
+import type { RangeCraftJSON, Position, ResolvedPosition } from './core/models';
 import { POSITIONS, POSITION_LABELS } from './core/models';
 import { PositionPage } from './components/PositionPage';
 import { QuickView } from './components/QuickView';
@@ -90,7 +90,7 @@ function StrategyItem({
 }
 
 function LibrarySidebar({
-  strategies, loadedStrategy, onLoad, onImport, onDelete, onRename
+  strategies, loadedStrategy, onLoad, onImport, onDelete, onRename, onCreate
 }: {
   strategies: { name: string }[];
   loadedStrategy: string | null;
@@ -98,6 +98,7 @@ function LibrarySidebar({
   onImport: (json: unknown, name: string) => void;
   onDelete: (name: string) => void;
   onRename: (name: string, newName: string) => void;
+  onCreate: (name: string) => void;
 }) {
   const [importing, setImporting] = useState(false);
   const [newName, setNewName] = useState('');
@@ -129,7 +130,20 @@ function LibrarySidebar({
 
   return (
     <div className="library-sidebar" style={{ padding: '0.5rem 0' }}>
-      <p style={{ color: 'var(--text-dim)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0.5rem 1.2rem 1rem' }}>Estrategias</p>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 1.2rem 1rem' }}>
+        <p style={{ color: 'var(--text-dim)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>Estrategias</p>
+        <button 
+          onClick={() => {
+            const name = prompt('Nombre de la nueva estrategia:');
+            if (name) onCreate(name);
+          }}
+          className="btn-more" 
+          style={{ opacity: 1, padding: '0.2rem' }} 
+          title="Nueva Estrategia"
+        >
+          ➕
+        </button>
+      </div>
       <div style={{ flex: 1, overflowY: 'auto' }}>
         {strategies.map((s) => (
           <StrategyItem 
@@ -164,9 +178,10 @@ function LibrarySidebar({
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
-  const { auth, login, strategies, loadedStrategy, positions, loadStrategy, renameStrategy, deleteStrategy, importJSON, error } = useAppState();
+  const { auth, login, strategies, loadedStrategy, positions, loadStrategy, createStrategy, updateStrategy, renameStrategy, deleteStrategy, importJSON, error } = useAppState();
   const [activePos, setActivePos] = useState<Position>('utg');
   const [view, setView] = useState<'study' | 'quick'>('study');
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (positions && positions.length > 0) {
@@ -176,6 +191,12 @@ export default function App() {
        }
     }
   }, [positions]);
+
+  const handleUpdate = (updatedPos: ResolvedPosition) => {
+    if (!positions || !loadedStrategy) return;
+    const newPositions = positions.map(p => p.position === updatedPos.position ? updatedPos : p);
+    updateStrategy(loadedStrategy, newPositions);
+  };
 
   if (auth === 'checking') return <div style={{ height: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-dim)' }}>Iniciando...</div>;
   if (auth === 'prompt') return <PasswordGate onLogin={login} />;
@@ -189,8 +210,8 @@ export default function App() {
         {loadedStrategy && <span className="app-header__strategy">{loadedStrategy}</span>}
         
         <div className="view-switcher">
-          <button className={view === 'study' ? 'active' : ''} onClick={() => setView('study')}>Estudio</button>
-          <button className={view === 'quick' ? 'active' : ''} onClick={() => setView('quick')}>Quick View</button>
+          <button className={view === 'study' ? 'active' : ''} onClick={() => { setView('study'); setIsEditing(false); }}>Estudio</button>
+          <button className={view === 'quick' ? 'active' : ''} onClick={() => { setView('quick'); setIsEditing(false); }}>Quick View</button>
         </div>
 
         {error && <span className="app-header__error">{error}</span>}
@@ -200,10 +221,11 @@ export default function App() {
         <LibrarySidebar
           strategies={strategies}
           loadedStrategy={loadedStrategy}
-          onLoad={loadStrategy}
-          onImport={(json, name) => importJSON(json as RangeCraftJSON, name)}
+          onLoad={(name) => { loadStrategy(name); setIsEditing(false); }}
+          onImport={(json, name) => { importJSON(json as RangeCraftJSON, name); setIsEditing(false); }}
           onDelete={deleteStrategy}
           onRename={renameStrategy}
+          onCreate={createStrategy}
         />
 
         <div className="content-panel">
@@ -232,7 +254,16 @@ export default function App() {
                     })}
                   </nav>
                   <main style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                    {activeData ? <PositionPage data={activeData} /> : <div className="main-scroll">Sin datos.</div>}
+                    {activeData ? (
+                      <PositionPage 
+                        data={activeData} 
+                        isEditing={isEditing}
+                        onToggleEdit={() => setIsEditing(!isEditing)}
+                        onUpdate={handleUpdate}
+                      />
+                    ) : (
+                      <div className="main-scroll">Sin datos.</div>
+                    )}
                   </main>
                 </>
               ) : (
