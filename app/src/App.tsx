@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import type { RangeCraftJSON, Position, ResolvedPosition } from './core/models';
-import { POSITIONS, POSITION_LABELS } from './core/models';
 import { PositionPage } from './components/PositionPage';
 import { QuickView } from './components/QuickView';
 import { useAppState } from './hooks/useAppState';
@@ -179,12 +178,25 @@ function LibrarySidebar({
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const { auth, login, strategies, loadedStrategy, positions, loadStrategy, createStrategy, updateStrategy, renameStrategy, deleteStrategy, importJSON, error } = useAppState();
-  const [activePos, setActivePos] = useState<Position>('utg');
+  const [activePos, setActivePos] = useState<string>('utg');
+  const [activeSit, setActiveSit] = useState<string>('open');
   const [view, setView] = useState<'study' | 'quick' | 'print'>('quick');
   const [isEditing, setIsEditing] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
 
-  // Auto-close on mobile when loading a strategy
+  // Auto-close when reducing to mobile
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setSidebarOpen(false);
+      } else {
+        setSidebarOpen(true);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const handleLoad = (name: string) => {
     loadStrategy(name);
     setIsEditing(false);
@@ -198,7 +210,7 @@ export default function App() {
          setActivePos(positions[0].position as Position);
        }
     }
-  }, [positions]);
+  }, [positions, activePos]);
 
   const handleUpdate = (updatedPos: ResolvedPosition) => {
     if (!positions || !loadedStrategy) return;
@@ -209,7 +221,7 @@ export default function App() {
   if (auth === 'checking') return <div style={{ height: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-dim)' }}>Iniciando...</div>;
   if (auth === 'prompt') return <PasswordGate onLogin={login} />;
 
-  const activeData = positions?.find((p) => p.position === activePos);
+
 
   return (
     <div className={`app ${sidebarOpen ? 'sidebar-visible' : 'sidebar-hidden'}`}>
@@ -255,43 +267,29 @@ export default function App() {
             </div>
           ) : (
             <>
-              {view === 'print' ? (
+              {view === 'quick' ? (
+                <QuickView 
+                  positions={positions} 
+                  activePos={activePos}
+                  setActivePos={setActivePos}
+                  activeSit={activeSit}
+                  setActiveSit={setActiveSit}
+                />
+              ) : view === 'study' ? (
+                <PositionPage 
+                  positions={positions}
+                  activePos={activePos}
+                  setActivePos={setActivePos}
+                  activeSit={activeSit}
+                  setActiveSit={setActiveSit}
+                  isEditing={isEditing} 
+                  onToggleEdit={() => setIsEditing(!isEditing)}
+                  onUpdate={handleUpdate}
+                />
+              ) : (
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-dim)' }}>
                    <h3>TODO: sin implementar</h3>
                 </div>
-              ) : view === 'study' ? (
-                <>
-                  <nav className="pos-tabs">
-                    {POSITIONS.map((pos) => {
-                      const exists = positions.some((p) => p.position === pos);
-                      const isActive = pos === activePos;
-                      return (
-                        <button 
-                          key={pos} 
-                          onClick={() => exists && setActivePos(pos)} 
-                          disabled={!exists}
-                          className={`pos-tab ${isActive ? 'active' : ''}`}
-                        >
-                          {POSITION_LABELS[pos] || pos.toUpperCase()}
-                        </button>
-                      );
-                    })}
-                  </nav>
-                  <main style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                    {activeData ? (
-                      <PositionPage 
-                        data={activeData} 
-                        isEditing={isEditing}
-                        onToggleEdit={() => setIsEditing(!isEditing)}
-                        onUpdate={handleUpdate}
-                      />
-                    ) : (
-                      <div className="main-scroll">Sin datos.</div>
-                    )}
-                  </main>
-                </>
-              ) : (
-                <QuickView positions={positions} />
               )}
             </>
           )}

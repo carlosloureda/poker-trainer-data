@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import type { ResolvedPosition } from '../core/models';
 import { POSITIONS, POSITION_LABELS, ACTION_COLORS } from '../core/models';
 import { actionLabel, situationLabel } from '../core/labels';
@@ -6,34 +6,46 @@ import { HandGrid } from './HandGrid';
 
 interface QuickViewProps {
   positions: ResolvedPosition[];
+  activePos: string;
+  setActivePos: (p: string) => void;
+  activeSit: string;
+  setActiveSit: (s: string) => void;
 }
 
-export function QuickView({ positions }: QuickViewProps) {
-  const [myPos, setMyPos] = useState<string>('utg');
-  const [activeSitKey, setActiveSitKey] = useState<string>('open');
+export function QuickView({ 
+  positions, 
+  activePos, 
+  setActivePos, 
+  activeSit, 
+  setActiveSit 
+}: QuickViewProps) {
+  const posData = useMemo(() => positions.find(p => p.position === activePos), [positions, activePos]);
 
-  const posData = useMemo(() => positions.find(p => p.position === myPos), [positions, myPos]);
-
-  // Reset to 'open' (or first available) when position changes
+  // Reset/Select situation if invalid for new position
   useEffect(() => {
-    if (posData?.open) {
-      setActiveSitKey('open');
-    } else if (posData?.situations.length) {
-      setActiveSitKey(posData.situations[0].key);
+    // 1. If current situation doesn't exist for the new position, reset it
+    const isValid = activeSit === 'open' ? !!posData?.open : !!posData?.situations.find(s => s.key === activeSit);
+    
+    if (!isValid) {
+      if (posData?.open) {
+        setActiveSit('open');
+      } else if (posData?.situations.length) {
+        // Fallback to the first available situation (crucial for BB)
+        setActiveSit(posData.situations[0].key);
+      }
     }
-  }, [myPos, posData]);
+  }, [activePos, posData, activeSit, setActiveSit]);
 
-  const currentCombos = useMemo(() => {
-    if (activeSitKey === 'open') return posData?.open;
-    return posData?.situations.find(s => s.key === activeSitKey)?.combos;
-  }, [posData, activeSitKey]);
+  const currentSituation = useMemo(() => {
+    if (activeSit === 'open') return posData?.open;
+    return posData?.situations.find(s => s.key === activeSit);
+  }, [posData, activeSit]);
+
+  const currentCombos = useMemo(() => currentSituation?.combos, [currentSituation]);
 
   const activeActions = useMemo(() => {
-    if (!currentCombos) return [];
-    const actions = new Set<string>();
-    Object.values(currentCombos).forEach(v => Object.keys(v).forEach(k => actions.add(k)));
-    return Array.from(actions);
-  }, [currentCombos]);
+    return currentSituation?.allowedActions || [];
+  }, [currentSituation]);
 
   return (
     <div className="quick-view">
@@ -46,8 +58,8 @@ export function QuickView({ positions }: QuickViewProps) {
              return (
                <button 
                  key={p} 
-                 onClick={() => setMyPos(p)}
-                 className={`play-btn ${myPos === p ? 'active' : ''} ${!hasData ? 'disabled' : ''}`}
+                 onClick={() => setActivePos(p)}
+                 className={`play-btn ${activePos === p ? 'active' : ''} ${!hasData ? 'disabled' : ''}`}
                  disabled={!hasData}
                >
                  {POSITION_LABELS[p]}
@@ -61,19 +73,11 @@ export function QuickView({ positions }: QuickViewProps) {
       <div className="play-selector-group">
         <span className="play-selector-label">SITUACIÓN:</span>
         <div className="play-buttons">
-          {posData?.open && (
-            <button 
-              onClick={() => setActiveSitKey('open')}
-              className={`play-btn ${activeSitKey === 'open' ? 'active' : ''}`}
-            >
-              OPEN (RFI)
-            </button>
-          )}
           {posData?.situations.map(sit => (
             <button 
               key={sit.key} 
-              onClick={() => setActiveSitKey(sit.key)}
-              className={`play-btn ${activeSitKey === sit.key ? 'active' : ''}`}
+              onClick={() => setActiveSit(sit.key)}
+              className={`play-btn ${activeSit === sit.key ? 'active' : ''}`}
             >
               {situationLabel(sit.key)}
             </button>

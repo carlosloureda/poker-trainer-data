@@ -104,47 +104,60 @@ body {
   overflow: hidden;
 }
 
+/* --- SIDEBAR LOGIC --- */
 .library-sidebar {
   width: 240px;
-  display: flex; /* Siempre visible en desktop */
+  display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border);
   background: var(--panel-dark);
-  transition: transform 0.2s ease, width 0.2s ease, opacity 0.2s;
+  transition: transform 0.3s ease, width 0.3s ease, opacity 0.3s;
   flex-shrink: 0;
   overflow: hidden;
 }
 
-/* En desktop, ignoramos el toggle y forzamos visibilidad */
+/* 1. DESKTOP: ALWAYS OPEN & NO TOGGLE */
 @media (min-width: 769px) {
-  .sidebar-hidden .library-sidebar {
+  .library-sidebar {
     width: 240px !important;
-    opacity: 1 !important;
     transform: none !important;
-    border-right: 1px solid var(--border) !important;
+    opacity: 1 !important;
+    display: flex !important;
+    position: relative !important;
   }
-  .app-header .btn-icon { display: none; } /* Ocultar hamburguesa en desktop */
+  /* Hide the toggle button on desktop */
+  .app-header .btn-icon {
+    display: none !important;
+  }
 }
 
+/* 2. MOBILE: DRAWER & TOGGLE */
 @media (max-width: 768px) {
   .library-sidebar {
     position: fixed;
-    top: 48px; /* Altura del header */
+    top: 52px; /* Header height */
     bottom: 0;
     left: 0;
-    z-index: 200;
+    z-index: 1000;
     width: 280px;
     box-shadow: 20px 0 50px rgba(0,0,0,0.5);
   }
-  
+
   .sidebar-hidden .library-sidebar {
-    display: flex !important; /* Mantenemos el flex pero ocultamos con transform */
     transform: translateX(-100%);
-    width: 280px !important;
+    opacity: 0;
+    pointer-events: none;
   }
-  
+
   .sidebar-visible .library-sidebar {
     transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  /* Show toggle button only on mobile */
+  .app-header .btn-icon {
+    display: flex !important;
   }
 }
 
@@ -384,6 +397,7 @@ body {
   border: 1px solid var(--border);
 }
 
+
 .play-empty {
   text-align: center;
   color: var(--text-dim);
@@ -400,9 +414,50 @@ body {
 .btn-primary:hover { background: #2563eb; }
 
 /* Legend */
-.action-legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
-.action-legend__item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); }
-.action-legend__dot { width: 12px; height: 12px; border-radius: 3px; }
+.action-legend { 
+  display: flex; 
+  gap: 0.75rem; 
+  flex-wrap: wrap; 
+  margin-top: 0.25rem; 
+}
+
+.action-legend__item { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.6rem; 
+  font-size: 0.8rem; 
+  color: var(--text-muted); 
+  padding: 0.6rem 1rem;
+  background: #1c1c1f;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.action-legend__item:hover {
+  border-color: var(--text-dim);
+  background: #27272a;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.action-legend__item.active-paint {
+  background: #27272a !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.2), inset 0 0 0 1px rgba(59, 130, 246, 0.1);
+  transform: scale(1.02);
+}
+
+.action-legend__dot { 
+  width: 14px; 
+  height: 14px; 
+  border-radius: 4px; 
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
 
 .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
 
@@ -562,11 +617,34 @@ body {
 /* Editor Styles */
 .action-legend__item.editable:hover {
   background: var(--panel);
-  box-shadow: 0 0 10px rgba(255,255,255,0.05);
 }
 
-.action-legend__item.active-paint {
-  background: var(--panel) !important;
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
-  transform: scale(1.05);
+/* Studio Specific */
+.studio-header { 
+  display: flex; 
+  justify-content: flex-end; 
+  width: 100%; 
+  max-width: 1000px; 
+  margin-bottom: 2rem; 
+}
+.studio-legend {
+  min-width: 220px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 1rem;
+}
+.add-btn { 
+  border: 1px dashed var(--border) !important; 
+  background: transparent !important; 
+  color: var(--text-dim) !important; 
+}
+.add-btn:hover { border-color: var(--primary) !important; color: var(--primary) !important; }
+
+.legend-title { 
+  font-size: 0.65rem; 
+  font-weight: 800; 
+  color: var(--text-dim); 
+  margin-bottom: 0.75rem; 
+  letter-spacing: 0.05em; 
+  text-transform: uppercase;
 }

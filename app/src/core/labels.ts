@@ -17,6 +17,7 @@ export function actionLabel(key: string): string {
 
 /** Maps raw situation keys to human-readable labels */
 export function situationLabel(key: string): string {
+  if (key === 'open') return 'OPEN (RFI)';
   return key
     .replace(/_vs_/g, ' vs ')
     .replace(/_/g, ' ')

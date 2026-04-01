@@ -13,23 +13,32 @@ export const POSITION_LABELS: Record<Position, string> = {
 /** Action types inside a situation */
 export type ActionType =
   | 'open'
+  | '3bet_shove'
   | '3bet_5bet_shove'
+  | '3bet_call'
   | '3bet_fold'
   | 'call_open'
   | '4bet_6bet'
   | '4bet_fold'
-  | 'call_3bet';
+  | '4bet_call'
+  | 'call_3bet'
+  | 'call'
+  | 'squeeze';
 
 /** Default colors for each action type */
 export const ACTION_COLORS: Record<string, string> = {
-  open:             '#ef4444', // red   – value open
-  '3bet_5bet_shove':'#ef4444', // red   – 3bet value
-  '4bet_6bet':      '#ef4444', // red   – 4bet value
-  '3bet_fold':      '#f97316', // orange – bluff 3bet
-  '4bet_fold':      '#f97316', // orange – bluff 4bet
-  call_open:        '#3b82f6', // blue  – flat call
-  call_3bet:        '#3b82f6', // blue  – call 3bet
-  squeeze:          '#a855f7', // purple – squeeze
+  open:             '#ef4444', 
+  '3bet_5bet_shove':'#ef4444', 
+  '3bet_shove':     '#ef4444',
+  '3bet_call':      '#ef4444',
+  '4bet_6bet':      '#ef4444', 
+  '4bet_call':      '#ef4444',
+  '3bet_fold':      '#f97316', 
+  '4bet_fold':      '#f97316', 
+  call_open:        '#3b82f6', 
+  call_3bet:        '#3b82f6', 
+  call:             '#3b82f6',
+  squeeze:          '#a855f7', 
 };
 
 // ─── The raw JSON shape ───────────────────────────────────────────────────────
@@ -62,11 +71,12 @@ export interface ResolvedSituation {
   key: string;           // e.g. "4bet_vs_btn"
   label: string;         // e.g. "4bet vs BTN"
   combos: ResolvedCombos;
+  allowedActions: string[];
 }
 
 /** All resolved data for one position */
 export interface ResolvedPosition {
   position: Position;
-  open: ResolvedCombos | null;
+  open: ResolvedSituation | null;
   situations: ResolvedSituation[];
 }

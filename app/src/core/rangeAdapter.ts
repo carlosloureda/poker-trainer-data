@@ -43,20 +43,24 @@ export function parseRangeCraftJSON(json: RangeCraftJSON): ResolvedPosition[] {
     const posData = rawData[pos];
     if (!posData) continue;
 
-    let open: ResolvedCombos | null = null;
+    let open: ResolvedSituation | null = null;
     const situations: ResolvedSituation[] = [];
 
     for (const [key, rawSituation] of Object.entries(posData)) {
+      const resolvedCombos = resolveSituation(rawSituation as Record<string, string[]>);
+      const allowedActions = Array.isArray(rawSituation) ? ['open'] : Object.keys(rawSituation);
+      
+      const sit: ResolvedSituation = {
+        key,
+        label: situationLabel(key),
+        combos: resolvedCombos,
+        allowedActions,
+      };
+
       if (key === 'open') {
-        open = resolveSituation(rawSituation as string[]);
-      } else {
-        const resolved = resolveSituation(rawSituation as Record<string, string[]>);
-        situations.push({
-          key,
-          label: situationLabel(key),
-          combos: resolved,
-        });
+        open = sit;
       }
+      situations.push(sit);
     }
 
     result.push({ position: pos as Position, open, situations });
@@ -96,10 +100,7 @@ export function unparseRangeCraftJSON(positions: ResolvedPosition[]): RangeCraft
   for (const pos of positions) {
     const posData: Record<string, any> = {};
     
-    if (pos.open) {
-      posData.open = unresolveSituation(pos.open);
-    }
-
+    // In our new model, 'open' is also in the situations array, but let's be safe
     for (const sit of pos.situations) {
       posData[sit.key] = unresolveSituation(sit.combos);
     }

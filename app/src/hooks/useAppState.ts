@@ -153,13 +153,62 @@ export function useAppState(): UseAppState {
   }
 
   async function createStrategy(name: string) {
-    const emptyJson: RangeCraftJSON = {
+    const blueprint: RangeCraftJSON = {
       Range_Craft: {
-        utg: { open: [] },
-        hj: {}, co: {}, btn: {}, sb: {}, bb: {}
+        "utg": {
+          "open": [],
+          "4bet_vs_hj": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] },
+          "4bet_vs_co": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] },
+          "4bet_vs_btn": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] },
+          "4bet_vs_sb": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] },
+          "4bet_vs_bb": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] }
+        },
+        "hj": {
+          "open": [],
+          "3bet_vs_utg": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "4bet_vs_co": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] },
+          "4bet_vs_btn": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] },
+          "4bet_vs_sb": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] },
+          "4bet_vs_bb": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] }
+        },
+        "co": {
+          "open": [],
+          "squeeze": { "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_utg": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_hj": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "4bet_vs_btn": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] },
+          "4bet_vs_sb": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] },
+          "4bet_vs_bb": { "4bet_6bet": [], "4bet_fold": [], "call": [] }
+        },
+        "btn": {
+          "open": [],
+          "squeeze": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_utg": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_hj": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_co": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "4bet_vs_sb": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] },
+          "4bet_vs_bb": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] }
+        },
+        "sb": {
+          "open": [],
+          "squeeze": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_utg": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_hj": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_co": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_btn": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "4bet_vs_bb": { "4bet_6bet": [], "4bet_fold": [], "4bet_call": [], "call": [] }
+        },
+        "bb": {
+          "squeeze": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_utg": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_hj": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_co": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_btn": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] },
+          "3bet_vs_sb": { "3bet_shove": [], "3bet_5bet_shove": [], "3bet_call": [], "3bet_fold": [], "call": [] }
+        }
       }
     };
-    await apiSaveStrategy(name, emptyJson);
+    await apiSaveStrategy(name, blueprint);
     await refreshList();
     await loadStrategy(name);
   }
