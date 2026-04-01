@@ -180,7 +180,7 @@ function LibrarySidebar({
 export default function App() {
   const { auth, login, strategies, loadedStrategy, positions, loadStrategy, createStrategy, updateStrategy, renameStrategy, deleteStrategy, importJSON, error } = useAppState();
   const [activePos, setActivePos] = useState<Position>('utg');
-  const [view, setView] = useState<'study' | 'quick'>('study');
+  const [view, setView] = useState<'study' | 'quick'>('quick');
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
@@ -210,8 +210,8 @@ export default function App() {
         {loadedStrategy && <span className="app-header__strategy">{loadedStrategy}</span>}
         
         <div className="view-switcher">
+          <button className={view === 'quick' ? 'active' : ''} onClick={() => { setView('quick'); setIsEditing(false); }}>Play Mode</button>
           <button className={view === 'study' ? 'active' : ''} onClick={() => { setView('study'); setIsEditing(false); }}>Estudio</button>
-          <button className={view === 'quick' ? 'active' : ''} onClick={() => { setView('quick'); setIsEditing(false); }}>Quick View</button>
         </div>
 
         {error && <span className="app-header__error">{error}</span>}
