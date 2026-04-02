@@ -20,6 +20,7 @@ interface UseAppState {
   renameStrategy: (name: string, newName: string) => Promise<void>;
   deleteStrategy: (name: string) => Promise<void>;
   importJSON: (json: RangeCraftJSON, name: string) => Promise<void>;
+  exportJSON: () => RangeCraftJSON | null;
   refreshList: () => Promise<void>;
   error: string | null;
 }
@@ -224,5 +225,15 @@ export function useAppState(): UseAppState {
     }
   }
 
-  return { auth, login, strategies, loadedStrategy, positions, loadStrategy, saveStrategy, createStrategy, updateStrategy, renameStrategy, deleteStrategy, importJSON, refreshList, error };
+  function exportJSON(): RangeCraftJSON | null {
+    if (!positions) return null;
+    try {
+      return unparseRangeCraftJSON(positions);
+    } catch (e) {
+      setError(`Error al exportar: ${e}`);
+      return null;
+    }
+  }
+
+  return { auth, login, strategies, loadedStrategy, positions, loadStrategy, saveStrategy, createStrategy, updateStrategy, renameStrategy, deleteStrategy, importJSON, exportJSON, refreshList, error };
 }

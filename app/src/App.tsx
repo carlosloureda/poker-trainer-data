@@ -43,9 +43,9 @@ function PasswordGate({ onLogin }: { onLogin: (pw: string) => Promise<boolean> }
 
 // ─── Strategy Library ─────────────────────────────────────────────────────────
 function StrategyItem({ 
-  name, isActive, onLoad, onRename, onDelete 
+  name, isActive, onLoad, onRename, onDelete, onExport
 }: { 
-  name: string, isActive: boolean, onLoad: (n: string) => void, onRename: (n: string) => void, onDelete: (n: string) => void 
+  name: string, isActive: boolean, onLoad: (n: string) => void, onRename: (n: string) => void, onDelete: (n: string) => void, onExport: (n: string) => void
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -75,6 +75,9 @@ function StrategyItem({
           }}>
             ✎ Renombrar
           </button>
+          <button className="dropdown-item" onClick={() => onExport(name)}>
+            📥 Exportar (.json)
+          </button>
           <button className="dropdown-item delete" onClick={() => {
             if (confirm(`¿Estás seguro de que quieres borrar "${name}"?`)) {
               onDelete(name);
@@ -89,11 +92,12 @@ function StrategyItem({
 }
 
 function LibrarySidebar({
-  strategies, loadedStrategy, onLoad, onImport, onDelete, onRename, onCreate
+  strategies, loadedStrategy, onLoad, onExport, onImport, onDelete, onRename, onCreate
 }: {
   strategies: { name: string }[];
   loadedStrategy: string | null;
   onLoad: (name: string) => void;
+  onExport: (name: string) => void;
   onImport: (json: unknown, name: string) => void;
   onDelete: (name: string) => void;
   onRename: (name: string, newName: string) => void;
@@ -152,6 +156,7 @@ function LibrarySidebar({
             onLoad={onLoad}
             onRename={(nn) => onRename(s.name, nn)}
             onDelete={onDelete}
+            onExport={onExport}
           />
         ))}
         {strategies.length === 0 && <p style={{ color: 'var(--text-dim)', fontSize: '0.75rem', padding: '0 1.2rem' }}>No hay estrategias.</p>}
@@ -177,7 +182,7 @@ function LibrarySidebar({
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
-  const { auth, login, strategies, loadedStrategy, positions, loadStrategy, createStrategy, updateStrategy, renameStrategy, deleteStrategy, importJSON, error } = useAppState();
+  const { auth, login, strategies, loadedStrategy, positions, loadStrategy, saveStrategy, createStrategy, updateStrategy, renameStrategy, deleteStrategy, importJSON, exportJSON, error } = useAppState();
   const [activePos, setActivePos] = useState<string>('utg');
   const [activeSit, setActiveSit] = useState<string>('open');
   const [view, setView] = useState<'study' | 'quick' | 'print'>('quick');
@@ -201,6 +206,18 @@ export default function App() {
     loadStrategy(name);
     setIsEditing(false);
     if (window.innerWidth <= 768) setSidebarOpen(false);
+  };
+
+  const handleExport = (name: string) => {
+    const json = exportJSON();
+    if (!json) return;
+    const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${name}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   useEffect(() => {
@@ -254,6 +271,7 @@ export default function App() {
           strategies={strategies}
           loadedStrategy={loadedStrategy}
           onLoad={handleLoad}
+          onExport={handleExport}
           onImport={(json, name) => { importJSON(json as RangeCraftJSON, name); setIsEditing(false); if (window.innerWidth <= 768) setSidebarOpen(false); }}
           onDelete={deleteStrategy}
           onRename={renameStrategy}
