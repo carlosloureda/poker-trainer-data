@@ -451,6 +451,20 @@ body {
   transform: scale(1.02);
 }
 
+.action-legend__item.is-static {
+  cursor: default;
+  background: transparent;
+  border-color: transparent;
+  padding: 0.2rem 0.5rem;
+  pointer-events: none;
+}
+
+.action-legend__item.is-static:hover {
+  transform: none;
+  background: transparent;
+  color: var(--text-muted);
+}
+
 .action-legend__dot { 
   width: 14px; 
   height: 14px; 

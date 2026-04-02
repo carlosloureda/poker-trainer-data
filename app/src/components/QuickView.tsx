@@ -91,7 +91,7 @@ export function QuickView({
             <HandGrid combos={currentCombos} size="lg" />
             <div className="play-legend">
               {activeActions.map(a => (
-                <div key={a} className="action-legend__item">
+                <div key={a} className="action-legend__item is-static">
                   <div className="action-legend__dot" style={{ backgroundColor: ACTION_COLORS[a] }} />
                   <span style={{ fontWeight: 700 }}>{actionLabel(a)}</span>
                 </div>

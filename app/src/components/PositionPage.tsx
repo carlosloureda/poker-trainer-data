@@ -140,7 +140,7 @@ export function PositionPage({
               {activeActions.map(a => (
                 <div 
                   key={a} 
-                  className={`action-legend__item ${isEditing && paintAction === a ? 'active-paint' : ''} ${isEditing ? 'editable' : ''}`}
+                  className={`action-legend__item ${isEditing && paintAction === a ? 'active-paint' : ''} ${isEditing ? 'editable' : 'is-static'}`}
                   onClick={() => isEditing && setPaintAction(a)}
                 >
                   <div className="action-legend__dot" style={{ backgroundColor: ACTION_COLORS[a] }} />

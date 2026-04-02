@@ -205,6 +205,8 @@ export default function App() {
   const handleLoad = (name: string) => {
     loadStrategy(name);
     setIsEditing(false);
+    setActivePos('utg');
+    setActiveSit('open');
     if (window.innerWidth <= 768) setSidebarOpen(false);
   };
 
