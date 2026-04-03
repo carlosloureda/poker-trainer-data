@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { RangeCraftJSON, Position, ResolvedPosition } from './core/models';
 import { PositionPage } from './components/PositionPage';
 import { QuickView } from './components/QuickView';
+import { PrintBuilder } from './components/PrintBuilder';
 import { useAppState } from './hooks/useAppState';
 import './index.css';
 
@@ -287,29 +288,29 @@ export default function App() {
             </div>
           ) : (
             <>
-              {view === 'quick' ? (
+              {view === 'quick' && positions && (
                 <QuickView 
                   positions={positions} 
-                  activePos={activePos}
-                  setActivePos={setActivePos}
-                  activeSit={activeSit}
-                  setActiveSit={setActiveSit}
+                  activePos={activePos} 
+                  setActivePos={setActivePos} 
+                  activeSit={activeSit} 
+                  setActiveSit={setActiveSit} 
                 />
-              ) : view === 'study' ? (
+              )}
+              {view === 'study' && positions && (
                 <PositionPage 
-                  positions={positions}
-                  activePos={activePos}
+                  positions={positions} 
+                  activePos={activePos} 
                   setActivePos={setActivePos}
-                  activeSit={activeSit}
-                  setActiveSit={setActiveSit}
+                  activeSit={activeSit} 
+                  setActiveSit={setActiveSit} 
                   isEditing={isEditing} 
                   onToggleEdit={() => setIsEditing(!isEditing)}
                   onUpdate={handleUpdate}
                 />
-              ) : (
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-dim)' }}>
-                   <h3>TODO: sin implementar</h3>
-                </div>
+              )}
+              {view === 'print' && positions && (
+                <PrintBuilder positions={positions} strategyName={loadedStrategy || 'Estrategia'} />
               )}
             </>
           )}
