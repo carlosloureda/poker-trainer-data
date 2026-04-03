@@ -182,7 +182,7 @@ function LibrarySidebar({
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
-  const { auth, login, strategies, loadedStrategy, positions, loadStrategy, saveStrategy, createStrategy, updateStrategy, renameStrategy, deleteStrategy, importJSON, exportJSON, error } = useAppState();
+  const { auth, login, strategies, loadedStrategy, positions, loadStrategy, createStrategy, updateStrategy, renameStrategy, deleteStrategy, importJSON, exportJSON, error } = useAppState();
   const [activePos, setActivePos] = useState<string>('utg');
   const [activeSit, setActiveSit] = useState<string>('open');
   const [view, setView] = useState<'study' | 'quick' | 'print'>('quick');
