@@ -249,7 +249,7 @@ export default function App() {
           {sidebarOpen ? '✕' : '☰'}
         </button>
         <span className="app-header__logo" onClick={() => setView('quick')} style={{ cursor: 'pointer' }}>
-          <span className="desktop-only" style={{ marginRight: '0.2rem' }}>♠</span> <span>Poker Trainer</span>
+          <span className="desktop-only" style={{ marginRight: '0.2rem' }}>♠</span> <span>RangeCraft Studio</span>
         </span>
         {loadedStrategy && <span className="app-header__strategy">{loadedStrategy}</span>}
         
