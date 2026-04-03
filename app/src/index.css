@@ -262,6 +262,30 @@ body {
   text-shadow: none;
 }
 
+/* Print Overrides for HandGrid */
+.print-builder .hand-cell {
+  background-color: #f8f8f8 !important; /* Gris muy suave en pantalla */
+}
+
+.print-builder .hand-cell:not(:has(.hand-fill)) .hand-label {
+  color: #ccc !important;
+  opacity: 1 !important;
+}
+
+@media print {
+  .print-page .hand-cell {
+    background-color: transparent !important;
+    border: 1px solid #eee !important;
+  }
+  .print-page .hand-label {
+    text-shadow: none !important;
+    color: #000 !important;
+  }
+  .print-page .hand-cell:not(:has(.hand-fill)) .hand-label {
+    color: #eee !important; /* Casi invisible para no molestar */
+  }
+}
+
 /* Situation Cards Grid */
 .situation-grid {
   display: grid;
@@ -564,16 +588,22 @@ body {
 }
 
 .strategy-btn-more {
-  padding: 0.6rem;
-  background: none;
-  border: none;
-  color: var(--text-dim);
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  transition: opacity 0.15s, color 0.15s;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.strategy-btn-more:hover {
+  background: var(--border);
+  color: #fff;
 }
 
 .strategy-item:hover .strategy-btn-more,
@@ -674,50 +704,209 @@ body {
 }
 
 .print-toolbar {
-  background: #000;
-  padding: 0.75rem 1.5rem;
+  background: var(--bg);
+  padding: 1.25rem 2.5rem;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
   z-index: 100;
+  height: 80px; /* Más aire */
 }
 
 .print-toolbar__controls {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2.5rem; /* Más espacio entre grupos */
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.toolbar-group label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
 }
 
 .print-btn {
   background: var(--panel);
   border: 1px solid var(--border);
   color: var(--text-muted);
-  padding: 0.5rem 0.9rem;
-  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.02em;
 }
 
-.print-btn:hover { background: var(--border); color: #fff; }
-.print-btn.active { background: var(--primary); color: #fff; border-color: transparent; }
-.print-btn.primary { background: var(--primary); color: #fff; border-color: transparent; }
-.print-btn.primary:hover { background: #2563eb; transform: translateY(-1px); }
+.print-btn:hover { 
+  border-color: var(--text-dim); 
+  background: #27272a; 
+  color: #fff; 
+  transform: translateY(-1px);
+}
+
+.print-btn.active { 
+  background: var(--primary); 
+  color: #fff; 
+  border-color: transparent; 
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.print-btn.primary { 
+  background: var(--primary); 
+  color: #fff; 
+  border-color: transparent;
+  padding: 0.7rem 1.5rem;
+}
+.print-btn.primary:hover { 
+  background: #2563eb; 
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+}
 
 .print-input {
-  background: var(--panel-dark);
+  background: #1c1c1f;
   border: 1px solid var(--border);
   color: #fff;
-  padding: 0.4rem;
-  width: 50px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 700;
+  padding: 0.5rem;
+  width: 60px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 800;
   text-align: center;
+}
+
+.desktop-only { display: flex !important; }
+.mobile-only { display: none !important; }
+
+@media (max-width: 1024px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: flex !important; }
+}
+
+/* Mobile Bar */
+.print-mobile-bar {
+  background: var(--bg);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  z-index: 100;
+}
+
+.mobile-bar-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.mobile-bar-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Settings Drawer (Mobile) */
+.mobile-settings-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.mobile-settings-drawer {
+  background: #111;
+  border-top: 1px solid var(--border);
+  padding: 1.5rem;
+  border-radius: 20px 20px 0 0;
+  animation: slide-up 0.3s cubic-bezier(0, 0, 0.2, 1);
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.75rem;
+}
+
+.drawer-header h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.drawer-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.drawer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.drawer-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.drawer-group label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.drawer-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.print-canvas-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  scroll-behavior: smooth;
+  background: #111;
+}
+
+@media (max-width: 768px) {
+  .print-page {
+    transform: scale(calc(92vw / 210mm)); 
+    margin-bottom: -150px;
+  }
 }
 
 .print-canvas-area {
@@ -740,6 +929,14 @@ body {
   box-sizing: border-box;
   position: relative;
   transition: transform 0.3s;
+  transform-origin: top center;
+}
+
+@media (max-width: 210mm) {
+  .print-page {
+    transform: scale(calc(100vw / 230mm)); /* Margen de seguridad */
+    margin-bottom: -150px; /* Compensa el espacio que deja el scale */
+  }
 }
 
 .print-page.portrait { width: 210mm; min-height: 297mm; }
