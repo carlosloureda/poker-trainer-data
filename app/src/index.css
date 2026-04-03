@@ -841,19 +841,63 @@ body {
 /* PRINT MEDIA OVERRIDES */
 @media print {
   @page { margin: 0; }
+  
+  * { 
+    -webkit-print-color-adjust: exact !important; 
+    print-color-adjust: exact !important; 
+    color-adjust: exact !important;
+  }
+
   body { background: #fff !important; }
-  .no-print, .app-header, .sidebar, .print-toolbar { display: none !important; }
-  .app-body, .app { height: auto !important; display: block !important; padding: 0 !important; overflow: visible !important; }
-  .content-panel { display: block !important; height: auto !important; padding: 0 !important; overflow: visible !important; }
-  .print-builder { background: #fff !important; height: auto !important; display: block !important; padding: 0 !important; }
-  .print-canvas-area { display: block !important; padding: 0 !important; height: auto !important; gap: 0 !important; overflow: visible !important; }
+  
+  .no-print, 
+  .app-header, 
+  .library-sidebar, 
+  .print-toolbar { 
+    display: none !important; 
+  }
+
+  .app-body, .app { 
+    height: auto !important; 
+    display: block !important; 
+    padding: 0 !important; 
+    overflow: visible !important; 
+  }
+
+  .content-panel { 
+    display: block !important; 
+    height: auto !important; 
+    padding: 0 !important; 
+    overflow: visible !important; 
+  }
+
+  .print-builder { 
+    background: #fff !important; 
+    height: auto !important; 
+    display: block !important; 
+    padding: 0 !important; 
+  }
+
+  .print-canvas-area { 
+    display: block !important; 
+    padding: 0 !important; 
+    height: auto !important; 
+    gap: 0 !important; 
+    overflow: visible !important; 
+  }
+
   .print-page { 
     box-shadow: none !important; 
     margin: 0 !important; 
-    padding: 10mm !important; 
-    width: 210mm !important; /* Portrait por defecto al imprimir si no se cambia */
+    padding: 15mm !important; 
+    width: 210mm !important; 
     min-height: 297mm !important;
     page-break-after: always;
+    border: none !important;
   }
-  .print-page.landscape { width: 297mm !important; min-height: 210mm !important; }
+
+  .print-page.landscape { 
+    width: 297mm !important; 
+    min-height: 210mm !important; 
+  }
 }
