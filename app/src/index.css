@@ -606,6 +606,29 @@ body {
   color: #fff;
 }
 
+/* Estilo profesional para el botón '+' */
+.btn-create-strategy {
+  background: var(--panel) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-muted) !important;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 0.75rem;
+  font-weight: normal;
+}
+
+.btn-create-strategy:hover {
+  background: var(--border) !important;
+  color: #fff !important;
+  border-color: var(--text-dim) !important;
+}
+
 .strategy-item:hover .strategy-btn-more,
 .strategy-btn-more.open {
   opacity: 1;

@@ -160,7 +160,7 @@ export function PrintBuilder({ positions, strategyName }: PrintBuilderProps) {
           <div key={pageIdx} className={`print-page ${layout}`}>
             <header className="print-page__header">
                 <h3>{strategyName}</h3>
-                <p>RangeCraft Studio · Pág. {pageIdx + 1}</p>
+                <p>RangeLab Studio · Pág. {pageIdx + 1}</p>
             </header>
 
             <div className={`print-grid cols-${cols}`}>
@@ -188,7 +188,7 @@ export function PrintBuilder({ positions, strategyName }: PrintBuilderProps) {
             </div>
             
             <footer className="print-page__footer">
-                Documento de Estudio · RangeCraft Studio
+                Documento de Estudio · RangeLab Studio
             </footer>
           </div>
         ))}

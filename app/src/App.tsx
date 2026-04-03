@@ -23,7 +23,7 @@ function PasswordGate({ onLogin }: { onLogin: (pw: string) => Promise<boolean> }
   return (
     <div className="modal-overlay" style={{ background: 'var(--bg)' }}>
       <form onSubmit={submit} style={{ padding: '2rem', background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 10, width: 320 }}>
-        <h2 style={{ color: 'var(--text)', marginBottom: '1.5rem', fontSize: '1.1rem' }}>♠ Poker Trainer</h2>
+        <h2 style={{ color: 'var(--text)', marginBottom: '1.5rem', fontSize: '1.1rem' }}>♠ RangeLab Studio</h2>
         <input
           type="password"
           value={pw}
@@ -141,11 +141,10 @@ function LibrarySidebar({
             const name = prompt('Nombre de la nueva estrategia:');
             if (name) onCreate(name);
           }}
-          className="btn-more" 
-          style={{ opacity: 1, padding: '0.2rem' }} 
+          className="btn-create-strategy" 
           title="Nueva Estrategia"
         >
-          ➕
+          ＋
         </button>
       </div>
       <div style={{ flex: 1, overflowY: 'auto' }}>
@@ -250,7 +249,7 @@ export default function App() {
           {sidebarOpen ? '✕' : '☰'}
         </button>
         <span className="app-header__logo" onClick={() => setView('quick')} style={{ cursor: 'pointer' }}>
-          <span className="desktop-only" style={{ marginRight: '0.2rem' }}>♠</span> <span>RangeCraft Studio</span>
+          <span className="desktop-only" style={{ marginRight: '0.2rem' }}>♠</span> <span>RangeLab Studio</span>
         </span>
         {loadedStrategy && <span className="app-header__strategy">{loadedStrategy}</span>}
         
