@@ -21,20 +21,13 @@ export function QuickView({
 }: QuickViewProps) {
   const posData = useMemo(() => positions.find(p => p.position === activePos), [positions, activePos]);
 
-  // Reset/Select situation if invalid for new position
+  // Always reset/select the first situation when position changes
   useEffect(() => {
-    // 1. If current situation doesn't exist for the new position, reset it
-    const isValid = activeSit === 'open' ? !!posData?.open : !!posData?.situations.find(s => s.key === activeSit);
-    
-    if (!isValid) {
-      if (posData?.open) {
-        setActiveSit('open');
-      } else if (posData?.situations.length) {
-        // Fallback to the first available situation (crucial for BB)
-        setActiveSit(posData.situations[0].key);
-      }
+    if (posData && posData.situations.length > 0) {
+      // Find what would be the first situation to show
+      setActiveSit(posData.situations[0].key);
     }
-  }, [activePos, posData, activeSit, setActiveSit]);
+  }, [activePos, setActiveSit]); // Triggered when position changes
 
   const currentSituation = useMemo(() => {
     if (activeSit === 'open') return posData?.open;
